@@ -10,6 +10,11 @@ import { AcceptanceList } from '@/components/docs/AcceptanceList';
 import { GitWorkflowCard } from '@/components/docs/GitWorkflowCard';
 import { ComponentScopeMatrix } from '@/components/docs/ComponentScopeMatrix';
 import { CollapsibleSection } from '@/components/docs/CollapsibleSection';
+import { VisualReferenceCard } from '@/components/docs/VisualReferenceCard';
+import { StepVerificationCard } from '@/components/docs/StepVerificationCard';
+import { AdaptationTableCard } from '@/components/docs/AdaptationTableCard';
+import { PracticalTaskStepper } from '@/components/docs/PracticalTaskStepper';
+import { DirectoryModeToggle } from '@/components/docs/DirectoryModeToggle';
 import { DOC_MODULES } from '@/lib/docs-data';
 
 interface DocViewProps {
@@ -19,7 +24,10 @@ interface DocViewProps {
 const SECTION_KEYS = ['alur-struktur', 'kode-inti', 'git-kriteria'];
 
 export function DocView({ module: mod }: DocViewProps) {
-  // Default: SEMUA 3 SEKSI TERPADU DIBUKA AGAR SISWA LANGSUNG BISA MEMBACA
+  // Check if module uses the new practical step-by-step format
+  const hasPracticalTasks = Boolean(mod.practicalTasks && mod.practicalTasks.length > 0);
+
+  // Default: SEMUA 3 SEKSI TERPADU DIBUKA AGAR SISWA LANGSUNG BISA MEMBACA (Untuk legacy mode)
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     'alur-struktur': true,
     'kode-inti': true,
@@ -71,7 +79,7 @@ export function DocView({ module: mod }: DocViewProps) {
   const nextModule = currentIndex >= 0 && currentIndex < DOC_MODULES.length - 1 ? DOC_MODULES[currentIndex + 1] : null;
 
   return (
-    <article className="w-full max-w-3xl mx-auto pb-16 font-content">
+    <article className="w-full max-w-6xl 2xl:max-w-7xl mx-auto pb-16 font-content">
       {/* Header */}
       <div className="pb-6 mb-6 border-b border-zinc-800 font-sidebar">
         <div className="flex items-center gap-2 mb-2">
@@ -80,6 +88,9 @@ export function DocView({ module: mod }: DocViewProps) {
           </Badge>
           <span className="text-[11px] text-zinc-500 font-mono">
             {mod.estimatedMinutes} menit
+          </span>
+          <span className="text-[11px] px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">
+            Modul Praktikum
           </span>
         </div>
 
@@ -90,38 +101,56 @@ export function DocView({ module: mod }: DocViewProps) {
           {mod.subtitle}
         </p>
 
-        {/* Ringkasan Tujuan & Task Cepat */}
-        <div className="mt-4 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs space-y-2">
+        {/* Ringkasan Tujuan & Prasyarat */}
+        <div className="mt-4 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs space-y-3">
           <div className="text-zinc-300 leading-relaxed">
             <span className="font-semibold text-white mr-1.5 font-sidebar">Tujuan:</span>
             {mod.tujuan}
           </div>
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-zinc-900 text-[11px] text-zinc-400 font-mono">
-            <span className="text-zinc-500">Tasks:</span>
-            {mod.tasks.map((task, idx) => (
-              <span key={idx} className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
-                {task}
+
+          {mod.prasyarat && mod.prasyarat.length > 0 && (
+            <div className="pt-2 border-t border-zinc-900">
+              <span className="font-semibold text-zinc-400 mr-1.5 font-sidebar block mb-1">
+                Prasyarat:
               </span>
-            ))}
-          </div>
+              <ul className="list-disc list-inside space-y-0.5 text-zinc-300 text-[11px]">
+                {mod.prasyarat.map((pra, idx) => (
+                  <li key={idx}>{pra}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {mod.tasks && mod.tasks.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-zinc-900 text-[11px] text-zinc-400 font-mono">
+              <span className="text-zinc-500 font-sidebar">Tasks:</span>
+              {mod.tasks.map((task, idx) => (
+                <span key={idx} className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
+                  {task}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Global Expand / Collapse Control */}
-        <div className="mt-4 pt-3 border-t border-zinc-850 flex items-center justify-between text-xs">
-          <div className="text-zinc-400 text-xs flex items-center gap-2">
-            <span className="text-zinc-500">
-              {openCount} dari {SECTION_KEYS.length} seksi terbuka
-            </span>
-          </div>
+        {/* Global Expand / Collapse Control (Legacy Only) */}
+        {!hasPracticalTasks && (
+          <div className="mt-4 pt-3 border-t border-zinc-850 flex items-center justify-between text-xs">
+            <div className="text-zinc-400 text-xs flex items-center gap-2">
+              <span className="text-zinc-500">
+                {openCount} dari {SECTION_KEYS.length} seksi terbuka
+              </span>
+            </div>
 
-          <button
-            type="button"
-            onClick={isAllOpen ? collapseAll : expandAll}
-            className="text-[11px] font-medium text-zinc-300 hover:text-white px-3 py-1 rounded-md border border-zinc-800 hover:border-zinc-700 bg-zinc-900/80 transition-colors cursor-pointer"
-          >
-            {isAllOpen ? 'Tutup Semua' : 'Buka Semua'}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={isAllOpen ? collapseAll : expandAll}
+              className="text-[11px] font-medium text-zinc-300 hover:text-white px-3 py-1 rounded-md border border-zinc-800 hover:border-zinc-700 bg-zinc-900/80 transition-colors cursor-pointer"
+            >
+              {isAllOpen ? 'Tutup Semua' : 'Buka Semua'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* SPECIAL COMPONENT MATRIX (JIKA MODUL 02) */}
@@ -131,9 +160,75 @@ export function DocView({ module: mod }: DocViewProps) {
         </div>
       )}
 
+      {/* TABEL ADAPTASI DOMAIN UNIVERSAL (JIKA TERSEDIA) */}
+      {mod.adaptationTable && mod.adaptationTable.length > 0 && (
+        <div className="my-6">
+          <AdaptationTableCard mappings={mod.adaptationTable} />
+        </div>
+      )}
+
+      {/* PILIHAN STRUKTUR FOLDER (DENGAN SRC VS TANPA SRC) */}
+      {hasPracticalTasks && (
+        <div className="my-6">
+          <DirectoryModeToggle />
+        </div>
+      )}
+
       {/* ========================================================================= */}
-      {/* 1. SEKSI TERPADU: ALUR PENGERJAAN & STRUKTUR FILE                         */}
+      {/* JIKA MENGGUNAKAN FORMAT PRAKTIKUM STEP-BY-STEP MODERN                     */}
       {/* ========================================================================= */}
+      {hasPracticalTasks ? (
+        <div className="space-y-10">
+          {mod.practicalTasks?.map((task) => (
+            <section
+              key={task.taskNumber}
+              id={`task-${task.taskNumber}`}
+              className="pt-2"
+            >
+              <PracticalTaskStepper task={task} moduleId={mod.slug} />
+            </section>
+          ))}
+
+          {/* Acceptance Criteria & Git Workflow */}
+          <section id="git-kriteria" className="my-8 pt-6 border-t border-zinc-800 space-y-6">
+            <div>
+              <div className="text-xs font-semibold text-zinc-300 font-sidebar mb-2">
+                Checklist Kriteria Selesai (Acceptance Criteria)
+              </div>
+              <AcceptanceList moduleId={mod.slug} items={mod.acceptanceCriteria} />
+            </div>
+
+            <div>
+              <div className="text-xs font-semibold text-zinc-300 font-sidebar mb-2">
+                Standar Percabangan &amp; Commit
+              </div>
+              <GitWorkflowCard
+                branchName={mod.gitStandard.branchName}
+                commitExample={mod.gitStandard.commitExample}
+                prTitle={mod.gitStandard.prTitle}
+              />
+            </div>
+          </section>
+
+          {/* Navigasi Modul Selanjutnya */}
+          {nextModule && (
+            <div className="pt-4 border-t border-zinc-850 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs font-sidebar">
+              <div>
+                <span className="text-zinc-500 text-[11px] block">Modul Selanjutnya:</span>
+                <span className="text-white font-semibold text-sm">{nextModule.title}</span>
+              </div>
+              <Link
+                href={`/docs/${nextModule.slug}`}
+                className="px-4 py-2 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 font-bold transition-colors text-center"
+              >
+                Lanjut ke Modul {nextModule.order.toString().padStart(2, '0')} &rarr;
+              </Link>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* LEGACY FALLBACK RENDERING (Accordion) */
+        <>
       <CollapsibleSection
         id="alur-struktur"
         title="1. Alur Pengerjaan & Struktur File"
@@ -302,34 +397,6 @@ export function DocView({ module: mod }: DocViewProps) {
             <AcceptanceList moduleId={mod.slug} items={mod.acceptanceCriteria} />
           </div>
 
-          {/* Kendala Umum & Solusi */}
-          {mod.pitfalls && mod.pitfalls.length > 0 && (
-            <div>
-              <div className="text-xs font-semibold text-zinc-300 font-sidebar mb-2">
-                Kendala Umum &amp; Solusi Cepat
-              </div>
-              <div className="space-y-2">
-                {mod.pitfalls.map((pf, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl border border-zinc-850 bg-black/60 text-xs"
-                  >
-                    <div className="text-rose-400 font-semibold mb-1 font-sidebar">
-                      Kendala: {pf.symptom}
-                    </div>
-                    <p className="text-zinc-400 mb-2 leading-relaxed">
-                      Penyebab: {pf.cause}
-                    </p>
-                    <div className="bg-zinc-950 p-2.5 rounded-lg border border-zinc-850 text-zinc-300 font-sidebar">
-                      <span className="text-emerald-400 font-semibold mr-1">Solusi:</span>
-                      {pf.solution}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Navigasi Modul Selanjutnya */}
           {nextModule && (
             <div className="pt-4 border-t border-zinc-850 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs font-sidebar">
@@ -347,6 +414,8 @@ export function DocView({ module: mod }: DocViewProps) {
           )}
         </div>
       </CollapsibleSection>
+        </>
+      )}
     </article>
   );
 }

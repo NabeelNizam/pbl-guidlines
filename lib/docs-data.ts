@@ -20,106 +20,266 @@ export const DOC_MODULES: DocModule[] = [
       'Memahami konsep dasar komponen React & URL path',
     ],
     tasks: [
-      'Membuat root layout bersih dengan navigasi global',
-      'Membuat modul halaman domain pertama (misal: /products atau /dashboard)',
-      'Menyediakan file loading.tsx dan error.tsx khusus per segmen rute',
-      'Mengatur metadata title & description halaman',
+      'Memetakan inventori rute dan memilih struktur direktori (src/ vs non-src/)',
+      'Membangun global state boundaries di root (app/loading.tsx & app/error.tsx)',
+      'Menerapkan route grouping (folder) untuk mengisolasi layout tanpa merusak URL',
+      'Membuat rute halaman manajemen pengguna (dashboard)/users/page.tsx (Kondisional)',
     ],
-    steps: [
+    adaptationTable: [
       {
-        title: 'Langkah 1: Periksa Root Layout (app/layout.tsx)',
-        description: 'Pastikan root layout membungkus seluruh aplikasi dan hanya memuat struktur HTML dasar, font, serta shell global (Header/Footer).',
-        detail: 'Hindari meletakkan logika state yang berat atau data fetching langsung di root layout jika itu hanya relevan untuk halaman tertentu.',
+        aspect: 'Pemetaan Rute Entitas Master Data',
+        universalExample: 'app/(dashboard)/users/page.tsx',
+        projectExampleA: 'app/(dashboard)/cars/page.tsx (Rental Mobil)',
+        projectExampleB: 'app/(dashboard)/items/page.tsx (Inventori Barang)',
       },
       {
-        title: 'Langkah 2: Buat Folder Domain Fitur (app/<nama-fitur>/page.tsx)',
-        description: 'Buat folder baru di bawah app/ sesuai entitas utama proyekmu (contoh: app/bookings/, app/items/, app/campaigns/, app/products/). Lalu tambahkan page.tsx di dalamnya.',
-        detail: 'Folder ini menentukan URL rute di browser. Jika foldernya bernama "bookings", URL-nya otomatis menjadi http://localhost:3000/bookings.',
+        aspect: 'URL Akses Bersih di Browser',
+        universalExample: 'http://localhost:3000/users',
+        projectExampleA: 'http://localhost:3000/cars',
+        projectExampleB: 'http://localhost:3000/items',
       },
       {
-        title: 'Langkah 3: Tambahkan State Boundary (loading.tsx & error.tsx)',
-        description: 'Di dalam folder app/<nama-fitur>/, sediakan loading.tsx untuk skeleton loading otomatis, dan error.tsx untuk menangani error tanpa mematikan seluruh aplikasi.',
-        detail: 'File error.tsx WAJIB bertipe Client Component dengan deklarasi "use client" di baris paling atas.',
+        aspect: 'Route Group Isolasi Layout',
+        universalExample: '(dashboard) & (auth)',
+        projectExampleA: '(dashboard) & (auth)',
+        projectExampleB: '(dashboard) & (auth)',
       },
       {
-        title: 'Langkah 4: Buat Sub-rute Detail Dinamis (app/<nama-fitur>/[id]/page.tsx)',
-        description: 'Untuk halaman detail entitas (misal detail booking, detail item, atau detail donasi), buat folder dengan kurung siku [id] di dalam folder fitur.',
-        detail: 'Next.js otomatis meneruskan parameter ID dari URL (contoh: /bookings/123) ke prop params di page.tsx.',
+        aspect: 'Global Loading Skeleton',
+        universalExample: 'app/loading.tsx (Root Global)',
+        projectExampleA: 'app/loading.tsx (Root Global)',
+        projectExampleB: 'app/loading.tsx (Root Global)',
+      },
+      {
+        aspect: 'Global Error Boundary',
+        universalExample: 'app/error.tsx (Root Global)',
+        projectExampleA: 'app/error.tsx (Root Global)',
+        projectExampleB: 'app/error.tsx (Root Global)',
       },
     ],
-    fileTree: [
-      { path: 'app/layout.tsx', type: 'file', status: 'modified', description: 'Root shell & fonts' },
-      { path: 'app/page.tsx', type: 'file', status: 'modified', description: 'Landing / redirect' },
-      { path: 'app/dashboard/', type: 'folder', status: 'added' },
-      { path: 'app/dashboard/page.tsx', type: 'file', status: 'added', description: 'Clean Code: panggil <Dashboard />' },
-      { path: 'app/dashboard/loading.tsx', type: 'file', status: 'added', description: 'Skeleton loading otomatis' },
-      { path: 'app/dashboard/error.tsx', type: 'file', status: 'added', description: 'Error boundary (use client)' },
-      { path: 'app/dashboard/[id]/', type: 'folder', status: 'added' },
-      { path: 'app/dashboard/[id]/page.tsx', type: 'file', status: 'added', description: 'Detail view' },
-      { path: 'components/dashboard/Dashboard.tsx', type: 'file', status: 'added', description: 'Komponen view dashboard' },
-    ],
-    codeSnippets: [
+    practicalTasks: [
       {
-        filename: 'app/dashboard/page.tsx',
-        language: 'tsx',
-        description: 'Clean Code: page.tsx tipis & rapi, bertindak sebagai entry point yang memanggil komponen view utama.',
-        code: `import { Metadata } from 'next';
-import { Dashboard } from '@/components/dashboard/Dashboard';
-// Atau jika memiliki komponen modular pendukung:
-// import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+        taskNumber: 1,
+        title: 'Pemetaan Kebutuhan Halaman & Penentuan Struktur Direktori',
+        description: 'Sebelum menulis kode, mahasiswa wajib memetakan arsitektur rute sistem (Publik, Auth, Dashboard) serta memastikan konvensi penempatan folder (apakah menggunakan src/ atau langsung di root app/).',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Melakukan Pemetaan Halaman (Route Inventory & Mental Model)',
+            description: 'Memetakan rute sistem terlebih dahulu sangat krusial agar struktur folder terarah, navigasi konsisten, dan shell layout tidak saling bertabrakan saat proyek bertambah besar.',
+            instructions: [
+              'Tinjau kebutuhan fungsional aplikasi Dashboard yang akan dibangun.',
+              'Petakan menjadi 3 kelompok rute: Publik (Landing /), Autentikasi (/login, /register), dan Backoffice Dashboard (/dashboard, /users).',
+              'Untuk proyek kelompok masing-masing, gantikan entitas "users" dengan domain tim Anda (misalnya /cars untuk rental atau /items untuk inventori).',
+              'Pastikan URL target tidak memuat nama teknis folder pembungkus.',
+            ],
+            fileTreeSnippet: `Rencana Pemetaan Rute Sistem:
+├── /                    -> Halaman Publik / Landing Page
+├── /login, /register    -> Gateway Autentikasi (Route Group: (auth))
+├── /dashboard           -> Ringkasan & Metrik Sistem (Route Group: (dashboard))
+└── /users               -> Master Data Entitas Utama (Route Group: (dashboard))`,
+            codeSnippet: {
+              filename: 'docs/route-inventory.md',
+              language: 'markdown',
+              description: 'Tabel inventori rute yang disepakati untuk sistem Dashboard PBL.',
+              code: `| Nama Halaman | Target URL Browser | Kelompok Rute Next.js | Kebutuhan Shell Layout |
+| :--- | :--- | :--- | :--- |
+| Beranda Publik | http://localhost:3000/ | Root Publik | Header publik minimalis |
+| Halaman Login | http://localhost:3000/login | (auth) | Card fullscreen tengah, tanpa sidebar |
+| Halaman Register | http://localhost:3000/register | (auth) | Card fullscreen tengah, tanpa sidebar |
+| Overview Dashboard | http://localhost:3000/dashboard | (dashboard) | Shell Dashboard: Sidebar + Header |
+| Manajemen Pengguna | http://localhost:3000/users | (dashboard) | Shell Dashboard: Sidebar + Header |`,
+            },
+            visualReference: {
+              figureNumber: 1,
+              type: 'diagram',
+              caption: 'Diagram Pemetaan Rute Sistem dan Pembagian Layout',
+              description: 'Diagram membagi rute aplikasi menjadi dua wilayah terisolasi: Area Auth (tampilan kartu terpusat) dan Area Dashboard (shell sidebar + header).',
+            },
+            verification: {
+              action: 'Diskusikan dan catat daftar inventori rute proyek kelompok Anda sebelum melanjutkan ke pembuatan file fisik.',
+              expectedResult: 'Setiap anggota tim memahami pemetaan halaman publik, auth, dan domain master data tim masing-masing.',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Menentukan Opsi Struktur Direktori: Menggunakan src/ vs Tanpa src/',
+            description: 'Next.js App Router mendukung 2 struktur direktori standar industri. Keduanya bekerja 100% identik. Perbedaannya hanya ada atau tidaknya folder pembungkus src/.',
+            instructions: [
+              'Buka VS Code Explorer pada proyek Next.js Anda.',
+              'Periksa apakah folder app/ berada di dalam src/ (src/app/) atau langsung di root (app/).',
+              'Gunakan tombol pemilih struktur di bagian atas modul ini untuk menyesuaikan path petunjuk praktikum.',
+              'Pastikan seluruh anggota kelompok sepakat menggunakan struktur yang sama.',
+            ],
+            fileTreeSnippet: `Opsi A (Dengan src/):                 Opsi B (Tanpa src/):
+my-pbl-project/                       my-pbl-project/
+├── src/                              ├── app/
+│   ├── app/                          │   ├── layout.tsx
+│   │   ├── layout.tsx                │   ├── loading.tsx
+│   │   ├── loading.tsx               │   ├── error.tsx
+│   │   ├── (auth)/                   │   ├── (auth)/
+│   │   └── (dashboard)/              │   └── (dashboard)/
+│   └── components/                   └── components/
+├── package.json                      ├── package.json
+└── tsconfig.json                     └── tsconfig.json`,
+            codeSnippet: {
+              filename: 'tsconfig.json',
+              language: 'json',
+              description: 'Konfigurasi path alias @/* di tsconfig.json yang otomatis mendukung kedua opsi struktur.',
+              code: `{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*", "./*"]
+    }
+  }
+}`,
+            },
+            visualReference: {
+              figureNumber: 2,
+              type: 'editor',
+              caption: 'Komparasi VS Code Explorer antara struktur dengan src/ dan tanpa src/',
+              description: 'Panel Explorer menampilkan hierarki folder proyek yang rapi dengan folder app/ sebagai pusat routing Next.js.',
+            },
+            verification: {
+              action: 'Periksa file tsconfig.json dan folder root proyek di VS Code',
+              expectedResult: 'Struktur folder proyek teridentifikasi dengan jelas (menggunakan src/app/ atau app/).',
+            },
+          },
+        ],
+      },
+      {
+        taskNumber: 2,
+        title: 'Membangun Global State Boundaries di Root Level',
+        description: 'Menempatkan boundary loading dan error di tingkat root (app/) agar bertindak sebagai penanganan terpusat untuk seluruh rute aplikasi tanpa perlu membuat file duplikat di setiap folder fitur.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Memeriksa Global Root Layout (app/layout.tsx)',
+            description: 'File root layout adalah pondasi HTML utama aplikasi yang membungkus seluruh halaman, konfigurasi font, serta metadata dasar sistem.',
+            instructions: [
+              'Buka file app/layout.tsx (atau src/app/layout.tsx).',
+              'Pastikan struktur dasar memuat tag html dan body.',
+              'Terapkan font Inter atau sans-serif standar sistem.',
+            ],
+            fileTreeSnippet: `app/
+├── layout.tsx       <-- Global Root Shell
+├── loading.tsx
+├── error.tsx
+└── page.tsx`,
+            codeSnippet: {
+              filename: 'app/layout.tsx',
+              language: 'tsx',
+              description: 'Root layout Next.js pembungkus seluruh segmen rute aplikasi.',
+              code: `import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dashboard | PBL App',
-  description: 'Ringkasan data dan metrik operasional',
+  title: 'PBL Enterprise Dashboard',
+  description: 'Sistem manajemen operasional proyek berbasis Next.js App Router.',
 };
 
-// STANDAR CLEAN CODE:
-// page.tsx TIDAK boleh bloated dengan ratusan baris JSX tampilan.
-// Cukup panggil komponen view utama seperti <Dashboard />.
-export default function DashboardPage() {
-  return <Dashboard />;
-}
-
-// Catatan: Jika butuh komponen pendukung, panggil secara modular:
-// export default function DashboardPage() {
-//   return (
-//     <div className="space-y-6">
-//       <DashboardHeader />
-//       <Dashboard />
-//     </div>
-//   );
-// }`,
-      },
-      {
-        filename: 'app/dashboard/loading.tsx',
-        language: 'tsx',
-        description: 'Skeleton loading state otomatis yang muncul saat halaman atau data sedang dimuat.',
-        code: `export default function DashboardLoading() {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="space-y-6 p-6 animate-pulse">
-      {/* Skeleton Header */}
-      <div className="h-8 bg-zinc-800 rounded w-1/4"></div>
-      <div className="h-4 bg-zinc-850 rounded w-1/2"></div>
-
-      {/* Skeleton Grid Kartu Metrik */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-        <div className="h-28 bg-zinc-900 rounded-xl border border-zinc-800"></div>
-        <div className="h-28 bg-zinc-900 rounded-xl border border-zinc-800"></div>
-        <div className="h-28 bg-zinc-900 rounded-xl border border-zinc-800"></div>
-      </div>
-    </div>
+    <html lang="id" className="dark">
+      <body className="min-h-screen bg-black text-zinc-100 antialiased font-sans">
+        {children}
+      </body>
+    </html>
   );
 }`,
-      },
-      {
-        filename: 'app/dashboard/error.tsx',
-        language: 'tsx',
-        description: 'Error boundary rute (WAJIB "use client") untuk menangkap kegagalan tanpa merusak aplikasi.',
-        code: `'use client';
+            },
+            visualReference: {
+              figureNumber: 3,
+              type: 'editor',
+              caption: 'File root layout.tsx di editor VS Code',
+              description: 'Tampilan root layout yang bersih tanpa logika kondisional navbar atau sidebar.',
+            },
+            verification: {
+              action: 'Buka http://localhost:3000 dan inspect element halaman di browser',
+              expectedResult: 'Elemen <html> memiliki class "dark" dan <body> membungkus konten rute dengan warna background gelap.',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Membuat Global Skeleton Loading (app/loading.tsx)',
+            description: 'File app/loading.tsx di tingkat root otomatis membungkus seluruh rute aplikasi dengan React Suspense. Setiap kali halaman berpindah atau data server sedang dimuat, skeleton universal ini aktif secara instan.',
+            instructions: [
+              'Buka folder root app/ (atau src/app/).',
+              'Buat file baru bernama loading.tsx sejajar dengan layout.tsx.',
+              'Tulis komponen skeleton universal berikut dengan animasi pulse.',
+            ],
+            fileTreeSnippet: `app/
+├── layout.tsx
+├── loading.tsx      <-- Global Loading State (Suspense Universal)
+├── error.tsx
+└── page.tsx`,
+            codeSnippet: {
+              filename: 'app/loading.tsx',
+              language: 'tsx',
+              description: 'Global skeleton loading state untuk seluruh rute aplikasi Next.js.',
+              code: `export default function GlobalLoading() {
+  return (
+    <main className="p-6 sm:p-10 max-w-6xl mx-auto space-y-6 animate-pulse">
+      {/* Header Skeleton */}
+      <div className="border-b border-zinc-800 pb-5 space-y-2">
+        <div className="h-7 bg-zinc-800 rounded-md w-1/4"></div>
+        <div className="h-4 bg-zinc-850 rounded-md w-1/3"></div>
+      </div>
+
+      {/* Content Skeleton: Filters & Cards/Table */}
+      <div className="space-y-4 pt-2">
+        <div className="flex items-center justify-between gap-4">
+          <div className="h-10 bg-zinc-900 rounded-lg border border-zinc-800 w-1/3"></div>
+          <div className="h-10 bg-zinc-900 rounded-lg border border-zinc-800 w-28"></div>
+        </div>
+        <div className="h-14 bg-zinc-900 rounded-lg border border-zinc-850"></div>
+        <div className="h-14 bg-zinc-900 rounded-lg border border-zinc-850"></div>
+        <div className="h-14 bg-zinc-900 rounded-lg border border-zinc-850"></div>
+      </div>
+    </main>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 4,
+              type: 'browser',
+              caption: 'Global skeleton wireframe saat navigasi halaman aktif',
+              description: 'Browser menampilkan transisi skeleton loading wireframe yang halus saat data asinkron sedang diambil dari server.',
+            },
+            verification: {
+              action: 'Aktifkan mode Network Throttling "Slow 4G" di DevTools browser, lalu klik tautan navigasi',
+              expectedResult: 'Skeleton wireframe global tampil seketika sebelum konten rute selesai dirender.',
+            },
+          },
+          {
+            stepNumber: 3,
+            title: 'Membuat Global Error Boundary (app/error.tsx)',
+            description: 'File app/error.tsx bertindak sebagai penangkap error runtime global (WAJIB Client Component dengan "use client"). Jika ada exception di rute mana pun, error boundary ini menangkapnya dan memberi opsi retry tanpa merusak seluruh aplikasi.',
+            instructions: [
+              'Buka folder root app/ (atau src/app/).',
+              'Buat file baru bernama error.tsx sejajar dengan layout.tsx.',
+              'Tulis deklarasi "use client" di baris paling awal file.',
+              'Terima props { error, reset } dan tampilkan UI fallback penanganan error global.',
+            ],
+            fileTreeSnippet: `app/
+├── layout.tsx
+├── loading.tsx
+├── error.tsx        <-- Global Error Boundary ('use client')
+└── page.tsx`,
+            codeSnippet: {
+              filename: 'app/error.tsx',
+              language: 'tsx',
+              description: 'Global error boundary dengan penanganan logging dan tombol reset retry.',
+              code: `'use client';
 
 import { useEffect } from 'react';
 
-export default function DashboardError({
+export default function GlobalError({
   error,
   reset,
 }: {
@@ -127,65 +287,431 @@ export default function DashboardError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Tangkap error untuk logging
-    console.error('Captured dashboard error:', error);
+    // Catat error ke console untuk debugging mahasiswa
+    console.error('Captured Global App Error:', error);
   }, [error]);
 
   return (
-    <div className="my-6 p-8 text-center rounded-xl border border-zinc-800 bg-zinc-950">
-      <h2 className="text-base font-bold text-rose-400 mb-2">
-        Gagal Memuat Halaman
+    <div className="my-16 p-8 max-w-lg mx-auto text-center rounded-2xl border border-rose-900/60 bg-rose-950/20 text-white">
+      <div className="w-12 h-12 rounded-full bg-rose-900/40 border border-rose-700/60 mx-auto flex items-center justify-center text-rose-400 mb-4">
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+
+      <h2 className="text-lg font-bold text-rose-400 mb-2">
+        Terjadi Kesalahan pada Aplikasi
       </h2>
-      <p className="text-xs text-zinc-400 mb-4 max-w-md mx-auto leading-relaxed">
-        {error.message || 'Terjadi kesalahan sistem saat memuat data halaman.'}
+      <p className="text-xs text-zinc-400 mb-6 leading-relaxed">
+        {error.message || 'Sistem mendeteksi kesalahan saat memuat halaman. Silakan coba kembali.'}
       </p>
+
       <button
+        type="button"
         onClick={() => reset()}
-        className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-semibold border border-zinc-700 transition-colors cursor-pointer"
+        className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-colors cursor-pointer"
       >
-        Coba Lagi
+        Coba Muat Ulang (Retry)
       </button>
     </div>
   );
 }`,
+            },
+            visualReference: {
+              figureNumber: 5,
+              type: 'browser',
+              caption: 'UI fallback Global Error Boundary saat terjadi runtime error',
+              description: 'Browser menampilkan kartu penanganan error yang elegan dengan tombol Coba Muat Ulang tanpa merusak shell aplikasi.',
+            },
+            verification: {
+              action: 'Periksa terminal dev server dan pastikan kompilasi bebas dari peringatan "ReactServerComponentsError"',
+              expectedResult: 'Aplikasi berjalan lancar tanpa error pada terminal console.',
+            },
+          },
+        ],
+      },
+      {
+        taskNumber: 3,
+        title: 'Menerapkan Route Grouping (folder) & Isolasi Multiple Layouts',
+        description: 'Menggunakan folder bertanda kurung (auth) dan (dashboard) untuk mengelompokkan halaman ke layout yang berbeda secara terisolasi tanpa mempengaruhi struktur URL browser.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Memahami Aturan Route Grouping dengan Kurung (...)',
+            description: 'Di Next.js App Router, nama folder yang dibungkus tanda kurung kurawal TIDAK masuk ke dalam URL path browser. Konsep ini memungkinkan kita membuat layout berbeda untuk Auth dan Dashboard tanpa logika percabangan di root layout.',
+            instructions: [
+              'Pahami bahwa folder (dashboard)/users/page.tsx menghasilkan URL http://localhost:3000/users (bukan /dashboard/users).',
+              'Pahami bahwa folder (auth)/login/page.tsx menghasilkan URL http://localhost:3000/login (bukan /auth/login).',
+              'Buat folder (dashboard) dan (auth) di dalam folder app/.',
+            ],
+            fileTreeSnippet: `app/
+├── layout.tsx
+├── loading.tsx
+├── error.tsx
+├── (auth)/             <-- Route Group Auth (URL bebas dari kata 'auth')
+│   ├── layout.tsx      <-- Layout kartu fullscreen
+│   └── login/
+│       └── page.tsx    <-- URL: /login
+└── (dashboard)/        <-- Route Group Dashboard (URL bebas dari kata 'dashboard')
+    ├── layout.tsx      <-- Shell Sidebar + Header
+    ├── dashboard/
+    │   └── page.tsx    <-- URL: /dashboard
+    └── users/
+        └── page.tsx    <-- URL: /users`,
+            codeSnippet: {
+              filename: 'docs/route-group-rules.md',
+              language: 'markdown',
+              description: 'Ringkasan aturan konvensi Route Grouping di Next.js App Router.',
+              code: `1. Folder dengan tanda kurung () tidak mempengaruhi URL path di browser.
+2. Setiap Route Group dapat memiliki file layout.tsx tersendiri (Nested Layout).
+3. Halaman di dalam (dashboard) otomatis mewarisi sidebar & header dashboard.
+4. Halaman di dalam (auth) otomatis bersih dari sidebar dan hanya menampilkan form card.`,
+            },
+            visualReference: {
+              figureNumber: 6,
+              type: 'diagram',
+              caption: 'Perbandingan pemetaan folder fisik vs URL browser dengan Route Grouping',
+              description: 'Diagram memperlihatkan bahwa kata (auth) dan (dashboard) dilewati saat Next.js merender URL di address bar.',
+            },
+            verification: {
+              action: 'Periksa kembali penamaan folder di VS Code: pastikan menggunakan tanda kurung kurawal biasa seperti (dashboard) dan (auth)',
+              expectedResult: 'Folder terdaftar dengan benar di explorer VS Code.',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Membuat Dashboard Shell Layout (app/(dashboard)/layout.tsx)',
+            description: 'Layout ini membungkus seluruh halaman internal backoffice. Di sinilah kita menaruh Sidebar navigasi, Header user profile, dan area konten utama {children}.',
+            instructions: [
+              'Di dalam folder app/, buat folder (dashboard) jika belum ada.',
+              'Buat file layout.tsx di dalam app/(dashboard)/.',
+              'Tulis komponen layout shell dengan Sidebar navigasi dan Header profil sederhana.',
+            ],
+            fileTreeSnippet: `app/
+└── (dashboard)/
+    └── layout.tsx       <-- Shell Dashboard (Sidebar + Header + Children)`,
+            codeSnippet: {
+              filename: 'app/(dashboard)/layout.tsx',
+              language: 'tsx',
+              description: 'Shell layout khusus area dashboard dengan Sidebar navigasi dan Header.',
+              code: `import React from 'react';
+import Link from 'next/link';
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen flex bg-zinc-950 text-zinc-100">
+      {/* Sidebar Navigasi Kiri */}
+      <aside className="w-64 border-r border-zinc-850 bg-black p-5 flex flex-col justify-between shrink-0">
+        <div>
+          {/* Brand Logo */}
+          <div className="flex items-center gap-2.5 pb-6 border-b border-zinc-850">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm">
+              PBL
+            </div>
+            <div>
+              <div className="font-bold text-white text-sm leading-none">Enterprise</div>
+              <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Dashboard Shell</div>
+            </div>
+          </div>
+
+          {/* Nav Links */}
+          <nav className="mt-6 space-y-1.5 text-xs font-medium">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Overview
+            </Link>
+            <Link
+              href="/users"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-white bg-blue-600/10 border border-blue-500/30 font-semibold transition-colors"
+            >
+              Pengguna (Users)
+            </Link>
+          </nav>
+        </div>
+
+        {/* Footer Sidebar / Logout shortcut */}
+        <div className="pt-4 border-t border-zinc-850 text-[11px] text-zinc-500 font-mono">
+          <Link href="/login" className="hover:text-zinc-300 transition-colors">
+            ← Keluar ke Login
+          </Link>
+        </div>
+      </aside>
+
+      {/* Konten Utama Dashboard */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-14 border-b border-zinc-850 bg-black/60 px-8 flex items-center justify-between shrink-0">
+          <span className="text-xs font-mono text-zinc-400">Backoffice Management</span>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-zinc-300 font-medium">Admin Online</span>
+          </div>
+        </header>
+
+        <main className="flex-1 p-8 overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 7,
+              type: 'browser',
+              caption: 'Struktur Shell Dashboard dengan Sidebar dan Header',
+              description: 'Tampilan browser memperlihatkan sidebar hitam di sisi kiri dan area header atas yang membungkus konten rute dinamis.',
+            },
+            verification: {
+              action: 'Periksa sintaks file app/(dashboard)/layout.tsx di editor',
+              expectedResult: 'File terkompilasi tanpa error dan siap membungkus halaman child di dalam folder (dashboard).',
+            },
+          },
+          {
+            stepNumber: 3,
+            title: 'Membuat Auth Shell Layout (app/(auth)/layout.tsx) & Halaman Login Dummy',
+            description: 'Membuat shell layout khusus autentikasi yang menampilkan kartu form di tengah layar tanpa sidebar dashboard.',
+            instructions: [
+              'Di dalam folder app/, buat folder (auth) jika belum ada.',
+              'Buat file layout.tsx di dalam app/(auth)/.',
+              'Buat folder login di dalam (auth)/, lalu tambahkan file page.tsx.',
+            ],
+            fileTreeSnippet: `app/
+└── (auth)/
+    ├── layout.tsx       <-- Shell Auth: Fullscreen Centered Card
+    └── login/
+        └── page.tsx     <-- URL: /login (bersih dari sidebar)`,
+            codeSnippet: {
+              filename: 'app/(auth)/layout.tsx',
+              language: 'tsx',
+              description: 'Layout khusus autentikasi dengan container terpusat di tengah layar.',
+              code: `import React from 'react';
+
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4">
+      <div className="w-full max-w-md p-8 rounded-2xl bg-black border border-zinc-800 shadow-2xl">
+        {children}
+      </div>
+    </div>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 8,
+              type: 'browser',
+              caption: 'Halaman /login menggunakan Auth Shell terpusat tanpa sidebar',
+              description: 'Browser menampilkan kartu di tengah layar pada URL /login. Tidak ada sidebar dashboard yang bocor ke halaman ini.',
+            },
+            verification: {
+              action: 'Buka http://localhost:3000/login di browser',
+              expectedResult: 'Halaman menampilkan kontainer kartu terpusat tanpa sidebar dashboard, dan URL di browser tetap /login.',
+            },
+          },
+        ],
+      },
+      {
+        taskNumber: 4,
+        title: 'Membuat Rute Halaman Manajemen Pengguna (Users)',
+        isConditional: true,
+        description: 'Langkah ini bersifat KONDISIONAL: hanya dikerjakan jika proyek kelompok Anda membutuhkan modul manajemen akun/pengguna internal (Users). Jika tema proyek Anda tidak memiliki tabel pengguna, Anda dapat melewati langkah ini atau langsung mengadaptasikannya ke entitas utama proyek Anda (misalnya /cars untuk rental atau /items untuk inventori).',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Membuat File Entry Point (app/(dashboard)/users/page.tsx)',
+            description: 'Membuat halaman rute master data pengguna yang otomatis mewarisi DashboardLayout dari folder induk (dashboard).',
+            instructions: [
+              'Buat folder users di dalam app/(dashboard)/.',
+              'Buat file page.tsx di dalam app/(dashboard)/users/.',
+              'Tulis komponen Server Component dengan metadata halaman.',
+            ],
+            fileTreeSnippet: `app/
+└── (dashboard)/
+    ├── layout.tsx
+    └── users/
+        └── page.tsx     <-- URL: http://localhost:3000/users`,
+            codeSnippet: {
+              filename: 'app/(dashboard)/users/page.tsx',
+              language: 'tsx',
+              description: 'Entry point halaman rute /users dengan metadata spesifik dan container tabel.',
+              code: `import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Manajemen Pengguna | PBL Dashboard',
+  description: 'Kelola data akun dan hak akses pengguna sistem.',
+};
+
+export default function UsersPage() {
+  return (
+    <div className="space-y-6 max-w-6xl">
+      {/* Page Header */}
+      <div className="border-b border-zinc-850 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white">Manajemen Pengguna</h1>
+          <p className="text-xs text-zinc-400 mt-1">
+            Kelola master data akun, status verifikasi, dan peran pengguna sistem.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-colors cursor-pointer self-start sm:self-auto"
+        >
+          + Tambah Pengguna
+        </button>
+      </div>
+
+      {/* Placeholder Container Tabel Pengguna */}
+      <div className="p-8 rounded-xl border border-zinc-850 bg-black/60 text-center space-y-2">
+        <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 mx-auto flex items-center justify-center font-mono text-sm">
+          #
+        </div>
+        <div className="text-sm font-semibold text-white">Rute /users Berhasil Dikonfigurasi</div>
+        <p className="text-xs text-zinc-400 max-w-md mx-auto">
+          Struktur rute dan shell dashboard telah siap. Pada modul berikutnya, kita akan mengisi area ini dengan komponen tabel modular dan data fetching.
+        </p>
+      </div>
+    </div>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 9,
+              type: 'browser',
+              caption: 'Halaman Manajemen Pengguna berhasil dirender di dalam shell dashboard',
+              description: 'Browser menampilkan URL http://localhost:3000/users dengan sidebar kiri aktif dan judul "Manajemen Pengguna".',
+            },
+            verification: {
+              action: 'Buka browser pada http://localhost:3000/users',
+              expectedResult: 'Halaman tampil rapi di dalam layout dashboard dengan judul tab "Manajemen Pengguna | PBL Dashboard".',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Verifikasi Menyeluruh & Testing Route Grouping di Browser',
+            description: 'Memastikan integrasi rute publik, rute auth, dan rute dashboard berjalan mulus dengan Client-side Navigation Next.js tanpa refresh halaman penuh.',
+            instructions: [
+              'Jalankan dev server dengan "npm run dev" di terminal.',
+              'Buka http://localhost:3000/users dan periksa address bar browser: pastikan URL tetap /users tanpa ada kata (dashboard).',
+              'Klik tautan "← Keluar ke Login" pada sidebar: pastikan halaman berpindah ke /login dengan layout form terpusat tanpa sidebar.',
+              'Uji tombol Back dan Forward pada browser untuk memastikan state history routing berfungsi sempurna.',
+            ],
+            fileTreeSnippet: `Struktur Final Rute Lengkap:
+app/
+├── layout.tsx           <-- Global Root
+├── loading.tsx          <-- Global Loading Suspense
+├── error.tsx            <-- Global Error Boundary
+├── (auth)/
+│   ├── layout.tsx       <-- Centered Card Layout
+│   └── login/
+│       └── page.tsx     <-- /login
+└── (dashboard)/
+    ├── layout.tsx       <-- Sidebar + Header Shell
+    └── users/
+        └── page.tsx     <-- /users`,
+            codeSnippet: {
+              filename: 'terminal',
+              language: 'bash',
+              description: 'Perintah untuk menjalankan development server dan memvalidasi rute.',
+              code: `npm run dev
+# Buka di browser:
+# 1. http://localhost:3000/users  (Dashboard Shell)
+# 2. http://localhost:3000/login  (Auth Shell)`,
+            },
+            visualReference: {
+              figureNumber: 10,
+              type: 'browser',
+              caption: 'Navigasi mulus antara /users dan /login membuktikan isolasi layout berhasil',
+              description: 'Browser memperlihatkan URL bersih tanpa folder bertanda kurung serta layout yang terpisah sempurna.',
+            },
+            verification: {
+              action: 'Periksa log terminal server: pastikan GET /users dan GET /login menghasilkan status HTTP 200 tanpa error',
+              expectedResult: 'Kedua rute menghasilkan response 200 OK dan berpindah secara instan di browser.',
+            },
+          },
+        ],
       },
     ],
+    // Legacy fallback fields
+    steps: [
+      {
+        title: 'Langkah 1: Petakan Halaman & Tentukan Struktur (src/ vs non-src/)',
+        description: 'Tentukan inventori rute dan pastikan struktur folder app/ atau src/app/ telah disepakati.',
+      },
+      {
+        title: 'Langkah 2: Siapkan Global Boundaries di Root (loading.tsx & error.tsx)',
+        description: 'Pasang Suspense loading skeleton dan Client Component error boundary di root app/.',
+      },
+      {
+        title: 'Langkah 3: Terapkan Route Grouping (auth) dan (dashboard)',
+        description: 'Gunakan folder bertanda kurung untuk mengisolasi layout tanpa mempengaruhi URL browser.',
+      },
+      {
+        title: 'Langkah 4: Bangun Halaman Users (dashboard)/users/page.tsx',
+        description: 'Buat entry point manajemen pengguna dan sambungkan navigasi link di sidebar.',
+      },
+    ],
+    fileTree: [
+      { path: 'app/layout.tsx', type: 'file', status: 'modified', description: 'Global root shell & fonts' },
+      { path: 'app/loading.tsx', type: 'file', status: 'added', description: 'Global skeleton loading otomatis' },
+      { path: 'app/error.tsx', type: 'file', status: 'added', description: 'Global error boundary (use client)' },
+      { path: 'app/(auth)/layout.tsx', type: 'file', status: 'added', description: 'Shell kartu login terpusat' },
+      { path: 'app/(auth)/login/page.tsx', type: 'file', status: 'added', description: 'Rute /login' },
+      { path: 'app/(dashboard)/layout.tsx', type: 'file', status: 'added', description: 'Shell dashboard dengan sidebar' },
+      { path: 'app/(dashboard)/users/page.tsx', type: 'file', status: 'added', description: 'Rute /users' },
+    ],
+    codeSnippets: [],
     integration: {
-      title: 'Integrasi dengan Desain Sistem & Navigasi Global',
-      explanation: 'Halaman ini langsung di-render di dalam app/layout.tsx melalui prop {children}. Ketika URL /products diakses, Next.js menyusun layout -> loading (jika async) -> page.',
-      connectedWith: ['app/layout.tsx', 'components/layout/Navbar.tsx'],
+      title: 'Integrasi App Router dengan Nested Layouts & Global Boundaries',
+      explanation: 'Next.js App Router secara otomatis menggabungkan root layout -> route group layout -> global loading state -> page component. URL yang dihasilkan tetap bersih tanpa mencantumkan folder kurung.',
+      connectedWith: ['app/layout.tsx', 'app/(dashboard)/layout.tsx', 'app/(auth)/layout.tsx'],
     },
     testingGuide: {
       manualSteps: [
-        'Jalankan "npm run dev" dan buka browser di http://localhost:3000/products',
-        'Pastikan judul tab browser sesuai dengan metadata yang diatur',
-        'Buka http://localhost:3000/products/123 untuk memastikan dynamic route bekerja',
-        'Simulasikan error dengan sengaja melempar throw new Error() di page.tsx dan pastikan error.tsx muncul',
+        'Jalankan "npm run dev" dan buka browser di http://localhost:3000/users',
+        'Pastikan judul tab browser menampilkan "Manajemen Pengguna | PBL Dashboard"',
+        'Buka http://localhost:3000/login dan pastikan tidak ada sidebar dashboard',
+        'Simulasikan network throttling untuk melihat global loading skeleton',
       ],
-      expectedResult: 'Halaman render tanpa hydration mismatch, tab title sesuai, dan fallback error berfungsi saat disimulasikan.',
+      expectedResult: 'URL bersih tanpa nama kurung, layout terpisah sempurna, dan transisi rute berjalan instan.',
     },
     acceptanceCriteria: [
-      { id: 'ac-1', text: 'Folder app/<domain>/page.tsx dapat dibuka di browser tanpa error console.' },
-      { id: 'ac-2', text: 'Tersedia file loading.tsx dengan skeleton placeholder yang nyaman dipandang.' },
-      { id: 'ac-3', text: 'Tersedia file error.tsx dengan tombol retry reset().' },
-      { id: 'ac-4', text: 'Dynamic route [id]/page.tsx dapat menerima params secara benar.' },
-      { id: 'ac-5', text: 'Metadata title dan description telah didefinisikan.' },
+      { id: 'ac-1', text: 'Seluruh rute sistem (Publik, Auth, Dashboard, Master Data) telah dipetakan dalam inventori rute.' },
+      { id: 'ac-2', text: 'Struktur folder proyek telah ditentukan (dengan src/ atau tanpa src/) dan konsisten.' },
+      { id: 'ac-3', text: 'Tersedia file global app/loading.tsx di tingkat root dengan skeleton pulse universal.' },
+      { id: 'ac-4', text: 'Tersedia file global app/error.tsx di tingkat root dengan deklarasi "use client" dan tombol retry reset().' },
+      { id: 'ac-5', text: 'Route Group (dashboard) dan (auth) berhasil memisahkan shell layout tanpa memunculkan nama kurung di URL.' },
+      { id: 'ac-6', text: '(Kondisional) Rute (dashboard)/users/page.tsx dapat diakses di URL http://localhost:3000/users jika sistem memerlukan manajemen pengguna.' },
     ],
     gitStandard: {
-      branchName: 'feat/page-structure',
-      commitExample: 'feat(router): setup products page and route boundary states',
-      prTitle: 'Setup App Router: Products Pages and State Boundaries',
+      branchName: 'feature/route-inventory-app-structure',
+      commitExample: 'feat(router): setup route grouping, global boundaries, and users dashboard page',
+      prTitle: 'Setup App Router: Route Grouping, Global Boundaries & Users Page',
     },
     pitfalls: [
       {
-        symptom: 'Error: "ReactServerComponentsError: You may not use \'use client\' in layout or page..."',
-        cause: 'Lupa bahwa error.tsx WAJIB bertipe Client Component ("use client"), sementara page.tsx bisa Server Component.',
-        solution: 'Tambahkan "use client" di baris paling atas error.tsx.',
+        symptom: 'Nama folder seperti "(dashboard)" muncul di URL browser, misalnya: http://localhost:3000/(dashboard)/users',
+        cause: 'Lupa menyertakan tanda kurung kurawal biasa saat membuat nama folder di VS Code (misalnya dinamai dashboard tanpa kurung).',
+        solution: 'Ubah nama folder di VS Code Explorer menjadi tepat (dashboard) dengan tanda kurung buka dan tutup.',
       },
       {
-        symptom: 'Loading skeleton tidak pernah muncul saat navigasi.',
-        cause: 'Komponen page.tsx tidak memiliki asynchronous action (fetch/promise).',
-        solution: 'Di Next.js, loading.tsx hanya aktif jika page atau komponen di dalamnya bersifat async.',
+        symptom: 'Error: "ReactServerComponentsError: You may not use \'use client\' in layout or page..."',
+        cause: 'Lupa bahwa error.tsx WAJIB bertipe Client Component ("use client"), sedangkan page.tsx secara default adalah Server Component.',
+        solution: 'Tambahkan deklarasi \'use client\'; tepat di baris paling pertama file error.tsx.',
+      },
+      {
+        symptom: 'Sidebar dashboard ikut muncul di halaman login atau register.',
+        cause: 'Halaman login ditaruh di dalam folder (dashboard)/login alih-alih di folder terpisah (auth)/login.',
+        solution: 'Pindahkan folder login ke dalam route group (auth)/ agar menggunakan auth layout tersendiri.',
       },
     ],
     nextStep: {
@@ -210,42 +736,63 @@ export default function DashboardError({
     tujuan: 'Menghilangkan kebiasaan memasukkan semua komponen ke global components/ dengan menetapkan aturan 3-Scope: Page-specific, Feature-specific, dan Global UI.',
     prasyarat: [
       'Modul 01: App Router & Page Structure telah diselesaikan',
-      'Memahami props dan modularitas React',
+      'Memahami props dan pemecahan komponen React modular',
     ],
     tasks: [
-      'Membuat folder components/ui/ untuk komponen primitif non-bisnis (Button, Modal, Input)',
-      'Membuat folder app/<route>/components/ untuk komponen yang hanya dipakai halaman tersebut',
-      'Memindahkan sub-bagian halaman dari monolithic page.tsx menjadi potongan komponen modular',
+      'Membuat komponen primitif global bebas logika bisnis di components/ui/',
+      'Membuat komponen lokal khusus halaman di app/users/components/',
+      'Menghubungkan komponen lokal dan global di page.tsx (thin page pattern)',
     ],
-    steps: [
+    adaptationTable: [
       {
-        title: 'Langkah 1: Identifikasi Scope Komponen',
-        description: 'Tanyakan: Apakah komponen ini dipakai di banyak fitur berbeda? Jika HANYA dipakai di satu halaman, simpan di dekat halaman tersebut.',
+        aspect: 'Komponen Primitif Global',
+        universalExample: 'components/ui/Button.tsx',
+        projectExampleA: 'components/ui/Button.tsx (Dipakai bersama)',
+        projectExampleB: 'components/ui/Button.tsx (Dipakai bersama)',
       },
       {
-        title: 'Langkah 2: Buat Primitif Global (components/ui/Button.tsx)',
-        description: 'Button, Input, Badge, Dialog tidak boleh memiliki business logic (misal: memanggil API produk). Komponen ini murni UI.',
+        aspect: 'Komponen Khusus Halaman',
+        universalExample: 'app/users/components/UserTable.tsx',
+        projectExampleA: 'app/cars/components/CarTable.tsx (Rental Mobil)',
+        projectExampleB: 'app/items/components/ItemTable.tsx (Inventori Barang)',
       },
       {
-        title: 'Langkah 3: Buat Komponen Lokal (app/products/components/ProductHeader.tsx)',
-        description: 'Komponen judul halaman dan action tombol tambah khusus domain produk ditaruh di folder lokal rute.',
+        aspect: 'Header Aksi Halaman',
+        universalExample: 'app/users/components/UserHeader.tsx',
+        projectExampleA: 'app/cars/components/CarHeader.tsx',
+        projectExampleB: 'app/items/components/ItemHeader.tsx',
+      },
+      {
+        aspect: 'Orkestrasi Entry Point',
+        universalExample: 'app/users/page.tsx',
+        projectExampleA: 'app/cars/page.tsx',
+        projectExampleB: 'app/items/page.tsx',
       },
     ],
-    fileTree: [
-      { path: 'components/', type: 'folder', status: 'modified' },
-      { path: 'components/ui/Button.tsx', type: 'file', status: 'added', description: 'Global UI button primitive' },
-      { path: 'components/ui/Badge.tsx', type: 'file', status: 'added', description: 'Global UI badge primitive' },
-      { path: 'app/products/components/', type: 'folder', status: 'added' },
-      { path: 'app/products/components/ProductHeader.tsx', type: 'file', status: 'added', description: 'Page-specific component' },
-      { path: 'app/products/components/ProductStats.tsx', type: 'file', status: 'added', description: 'Page-specific component' },
-      { path: 'app/products/page.tsx', type: 'file', status: 'modified', description: 'Komposisi komponen modular' },
-    ],
-    codeSnippets: [
+    practicalTasks: [
       {
-        filename: 'components/ui/Button.tsx',
-        language: 'tsx',
-        description: 'Contoh komponen Global UI murni (bebas business logic)',
-        code: `import React from 'react';
+        taskNumber: 1,
+        title: 'Membuat Komponen Primitif Global UI (components/ui/)',
+        description: 'Komponen primitif adalah komponen UI murni tanpa dependensi bisnis. Komponen ini dapat dipakai di mana saja dalam aplikasi.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Membuat Komponen Button Reusable (components/ui/Button.tsx)',
+            description: 'Kita membuat tombol standar yang mendukung beberapa varian tampilan (primary, secondary, danger) dan loading state.',
+            instructions: [
+              'Buka root folder proyek.',
+              'Buat folder components/ui/ jika belum ada.',
+              'Buat file Button.tsx di dalam folder components/ui/.',
+              'Masukkan kode implementasi tombol berikut.',
+            ],
+            fileTreeSnippet: `components/
+└── ui/
+    └── Button.tsx`,
+            codeSnippet: {
+              filename: 'components/ui/Button.tsx',
+              language: 'tsx',
+              description: 'Komponen tombol universal dengan varian warna dan loading indicator.',
+              code: `import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger';
@@ -260,80 +807,296 @@ export function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const styles = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondary: 'bg-slate-100 hover:bg-slate-200 text-slate-800',
-    danger: 'bg-rose-600 hover:bg-rose-700 text-white',
+  const variantStyles = {
+    primary: 'bg-blue-600 hover:bg-blue-500 text-white border-transparent',
+    secondary: 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700',
+    danger: 'bg-rose-600 hover:bg-rose-500 text-white border-transparent',
   };
 
   return (
     <button
       disabled={disabled || isLoading}
-      className={\`px-4 py-2 rounded-lg font-medium text-sm transition-all disabled:opacity-50 \${styles[variant]} \${className}\`}
+      className={\`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed \${variantStyles[variant]} \${className}\`}
       {...props}
     >
-      {isLoading ? 'Memproses...' : children}
+      {isLoading ? (
+        <span className="flex items-center gap-1.5">
+          <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span>Memuat...</span>
+        </span>
+      ) : (
+        children
+      )}
     </button>
   );
 }`,
+            },
+            visualReference: {
+              figureNumber: 1,
+              type: 'editor',
+              caption: 'Penempatan komponen UI primitif di folder global',
+              description: 'Screenshot VS Code Explorer menunjukkan file components/ui/Button.tsx berada di folder root components/ui/, terisolasi dari domain bisnis apa pun.',
+            },
+            verification: {
+              action: 'Periksa tidak ada impor dari app/ atau logika database di dalam file components/ui/Button.tsx',
+              expectedResult: 'File Button.tsx hanya mengimpor React dan murni mengelola styling HTML button.',
+            },
+          },
+        ],
       },
       {
-        filename: 'app/products/components/ProductHeader.tsx',
-        language: 'tsx',
-        description: 'Page-specific component yang hanya dipakai di app/products/page.tsx',
-        code: `import { Button } from '@/components/ui/Button';
+        taskNumber: 2,
+        title: 'Membuat Komponen Khusus Halaman (Page-Specific Components)',
+        description: 'Komponen yang hanya dipakai di halaman Users TIDAK BOLEH ditaruh di folder global components/. Letakkan di dalam app/users/components/.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Membuat UserHeader untuk Judul dan Tombol Tambah',
+            description: 'Komponen ini menampilkan judul halaman, subteks metrik, dan tombol aksi untuk menambah pengguna baru.',
+            instructions: [
+              'Buka folder app/users/.',
+              'Buat subfolder baru bernama components/.',
+              'Di dalam app/users/components/, buat file UserHeader.tsx.',
+            ],
+            fileTreeSnippet: `app/
+└── users/
+    ├── components/
+    │   └── UserHeader.tsx
+    ├── page.tsx
+    ├── loading.tsx
+    └── error.tsx`,
+            codeSnippet: {
+              filename: 'app/users/components/UserHeader.tsx',
+              language: 'tsx',
+              description: 'Header rute Users yang mengimpor komponen global Button.',
+              code: `import React from 'react';
+import { Button } from '@/components/ui/Button';
 
-interface ProductHeaderProps {
-  totalCount: number;
-  onAddNew?: () => void;
+interface UserHeaderProps {
+  totalUsers: number;
 }
 
-export function ProductHeader({ totalCount, onAddNew }: ProductHeaderProps) {
+export function UserHeader({ totalUsers }: UserHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Manajemen Produk</h1>
-        <p className="text-sm text-slate-500">
-          Total {totalCount} produk terdaftar dalam katalog sistem.
+        <h1 className="text-2xl font-bold tracking-tight text-white">Manajemen Pengguna</h1>
+        <p className="text-xs text-zinc-400 mt-1">
+          Total <span className="font-mono text-sky-400 font-bold">{totalUsers}</span> pengguna terdaftar dalam sistem.
         </p>
       </div>
 
-      <Button onClick={onAddNew}>
-        + Tambah Produk Baru
+      <Button variant="primary">
+        + Tambah Pengguna
       </Button>
     </div>
   );
 }`,
+            },
+            visualReference: {
+              figureNumber: 2,
+              type: 'editor',
+              caption: 'Struktur folder komponen lokal di dalam segmen rute',
+              description: 'Screenshot VS Code Explorer menunjukkan app/users/components/UserHeader.tsx berada tepat di bawah rute users, bukan di global components.',
+            },
+            verification: {
+              action: 'Simpan file UserHeader.tsx dan pastikan import Button dari "@/components/ui/Button" tidak menghasilkan error alias path',
+              expectedResult: 'Tidak ada garis merah linting pada editor VS Code.',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Membuat Komponen UserTable untuk Menampilkan Data',
+            description: 'Tabel daftar pengguna dipecah ke komponen tersendiri agar file page.tsx tetap ringkas dan mudah dikembangkan.',
+            instructions: [
+              'Di dalam folder app/users/components/, buat file baru bernama UserTable.tsx.',
+              'Buat interface tipe data baris pengguna dan render baris tabel.',
+            ],
+            fileTreeSnippet: `app/
+└── users/
+    ├── components/
+    │   ├── UserHeader.tsx
+    │   └── UserTable.tsx
+    ├── page.tsx
+    ├── loading.tsx
+    └── error.tsx`,
+            codeSnippet: {
+              filename: 'app/users/components/UserTable.tsx',
+              language: 'tsx',
+              description: 'Tabel data pengguna dengan status badge dan aksi kolom.',
+              code: `import React from 'react';
+
+export interface UserItem {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: 'active' | 'inactive';
+}
+
+interface UserTableProps {
+  users: UserItem[];
+}
+
+export function UserTable({ users }: UserTableProps) {
+  if (users.length === 0) {
+    return (
+      <div className="p-8 text-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-400 text-xs">
+        Belum ada data pengguna yang terdaftar.
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-950">
+      <table className="w-full text-left text-xs">
+        <thead className="bg-zinc-900 text-zinc-400 uppercase text-[10px] tracking-wider border-b border-zinc-800">
+          <tr>
+            <th className="py-3 px-4">Nama</th>
+            <th className="py-3 px-4">Email</th>
+            <th className="py-3 px-4">Role</th>
+            <th className="py-3 px-4">Status</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-zinc-850 text-zinc-300">
+          {users.map((u) => (
+            <tr key={u.id} className="hover:bg-zinc-900/50 transition-colors">
+              <td className="py-3 px-4 font-semibold text-white">{u.name}</td>
+              <td className="py-3 px-4 text-zinc-400 font-mono text-[11px]">{u.email}</td>
+              <td className="py-3 px-4">
+                <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-900 border border-zinc-800 font-mono">
+                  {u.role}
+                </span>
+              </td>
+              <td className="py-3 px-4">
+                <span className={\`px-2 py-0.5 rounded text-[10px] font-mono \${
+                  u.status === 'active' 
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' 
+                    : 'bg-zinc-800 text-zinc-400'
+                }\`}>
+                  {u.status}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 3,
+              type: 'browser',
+              caption: 'Mockup tabel data pengguna pada antarmuka rute users',
+              description: 'Browser menampilkan tabel bersih dengan kolom Nama, Email, Role, dan Status berformat tema gelap.',
+            },
+            verification: {
+              action: 'Pastikan file UserTable.tsx ter-export dengan benar',
+              expectedResult: 'File siap diimpor ke dalam app/users/page.tsx tanpa circular dependency.',
+            },
+          },
+        ],
+      },
+      {
+        taskNumber: 3,
+        title: 'Menghubungkan Komponen ke Page (Clean Orchestration)',
+        description: 'Menjadikan file page.tsx sebagai thin page yang hanya mengorkestrasi komponen lokal dan passing data.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Mengimpor dan Merakit Komponen di app/users/page.tsx',
+            description: 'Kita ganti placeholder sebelumnya di page.tsx dengan memanggil <UserHeader /> dan <UserTable />.',
+            instructions: [
+              'Buka file app/users/page.tsx.',
+              'Impor UserHeader dan UserTable dari folder "./components/".',
+              'Sediakan data mock sementara sebelum terhubung ke database backend di modul berikutnya.',
+            ],
+            codeSnippet: {
+              filename: 'app/users/page.tsx',
+              language: 'tsx',
+              description: 'Standar Thin Page: page.tsx ringkas (< 50 baris), hanya mengorkestrasi komponen.',
+              code: `import { Metadata } from 'next';
+import { UserHeader } from './components/UserHeader';
+import { UserTable, UserItem } from './components/UserTable';
+
+export const metadata: Metadata = {
+  title: 'Manajemen Pengguna | PBL Dashboard',
+  description: 'Daftar pengguna terdaftar dan kontrol hak akses.',
+};
+
+// Data contoh awal (akan digantikan oleh Backend Database Query di modul selanjutnya)
+const INITIAL_USERS: UserItem[] = [
+  { id: '1', name: 'Ahmad Fauzi', email: 'ahmad@example.com', role: 'admin', status: 'active' },
+  { id: '2', name: 'Siti Rahma', email: 'siti@example.com', role: 'staff', status: 'active' },
+  { id: '3', name: 'Budi Santoso', email: 'budi@example.com', role: 'member', status: 'inactive' },
+];
+
+export default function UsersPage() {
+  return (
+    <main className="p-8 max-w-5xl mx-auto space-y-6">
+      <UserHeader totalUsers={INITIAL_USERS.length} />
+      <UserTable users={INITIAL_USERS} />
+    </main>
+  );
+}`,
+            },
+            visualReference: {
+              figureNumber: 4,
+              type: 'browser',
+              caption: 'Hasil integrasi komponen pada rute /users di browser',
+              description: 'Browser menampilkan URL http://localhost:3000/users dengan judul Manajemen Pengguna, tombol + Tambah Pengguna, dan tabel daftar pengguna dengan data contoh awal.',
+            },
+            verification: {
+              action: 'Buka http://localhost:3000/users di browser',
+              expectedResult: 'Header halaman menampilkan total "3" pengguna dan tabel merender 3 baris data pengguna dengan status badge aktif/inaktif.',
+            },
+          },
+        ],
       },
     ],
+    // Legacy fallback fields
+    steps: [
+      {
+        title: 'Langkah 1: Identifikasi Scope Komponen',
+        description: 'Tanyakan: Apakah komponen ini dipakai di banyak fitur berbeda? Jika HANYA dipakai di satu halaman, simpan di dekat halaman tersebut.',
+      },
+    ],
+    fileTree: [
+      { path: 'components/ui/Button.tsx', type: 'file', status: 'added', description: 'Global UI button primitive' },
+      { path: 'app/users/components/UserHeader.tsx', type: 'file', status: 'added', description: 'Page-specific header' },
+      { path: 'app/users/components/UserTable.tsx', type: 'file', status: 'added', description: 'Page-specific table' },
+      { path: 'app/users/page.tsx', type: 'file', status: 'modified', description: 'Komposisi komponen modular' },
+    ],
+    codeSnippets: [],
     integration: {
       title: 'Komposisi di Tingkat Page',
-      explanation: 'page.tsx bertindak sebagai orkestrator yang mengimpor komponen lokal (ProductHeader) dan komponen global (Button, Navbar), bukan menulis seluruh JSX ratusan baris di satu file.',
-      connectedWith: ['app/products/page.tsx', 'components/ui/Button.tsx'],
+      explanation: 'page.tsx bertindak sebagai orkestrator yang mengimpor komponen lokal (UserHeader, UserTable) dan komponen global (Button), bukan menulis seluruh JSX ratusan baris di satu file.',
+      connectedWith: ['app/users/page.tsx', 'components/ui/Button.tsx'],
     },
     testingGuide: {
       manualSteps: [
-        'Buka app/products/page.tsx, pastikan file terbaca rapi < 100 baris kode',
+        'Buka app/users/page.tsx, pastikan file terbaca rapi < 50 baris kode',
         'Pastikan components/ui/Button tidak mengimpor file apa pun dari dalam folder app/',
-        'Verifikasi tampilan di browser tetap berfungsi seperti sebelumnya',
+        'Buka /users di browser dan pastikan tabel pengguna tampil rapi',
       ],
       expectedResult: 'Kode bersih, ketergantungan file mengalir ke satu arah (Page mengimpor Components, bukan sebaliknya).',
     },
     acceptanceCriteria: [
-      { id: 'ac-2-1', text: 'Tidak ada komponen khusus produk yang disimpan di root components/ui/.' },
-      { id: 'ac-2-2', text: 'Folder app/<domain>/components/ dibuat untuk komponen yang spesifik rute.' },
-      { id: 'ac-2-3', text: 'Semua komponen UI global menerima varian lewat props (Button, Badge).' },
-      { id: 'ac-2-4', text: 'File page.tsx menjadi ringkas dan mudah dibaca (clean orchestration).' },
+      { id: 'ac-2-1', text: 'Tidak ada komponen khusus domain users yang disimpan di root components/ui/.' },
+      { id: 'ac-2-2', text: 'Folder app/users/components/ dibuat untuk komponen yang spesifik rute.' },
+      { id: 'ac-2-3', text: 'Komponen Button primitif menerima varian dan loading state lewat props.' },
+      { id: 'ac-2-4', text: 'File app/users/page.tsx ringkas (< 50 baris) berstandar thin orchestration.' },
     ],
     gitStandard: {
-      branchName: 'refactor/component-scoping',
-      commitExample: 'refactor(components): isolate page-specific components from global ui',
-      prTitle: 'Refactor: Implement 3-Scope Component Architecture',
+      branchName: 'feature/users-components-architecture',
+      commitExample: 'feat(users): modularize page with UserHeader and UserTable components',
+      prTitle: 'Refactor: Implement Page-Specific Component Architecture for Users',
     },
     pitfalls: [
       {
         symptom: 'Circular Dependency Warning saat build.',
-        cause: 'Komponen global di components/ui mengimpor data atau tipe dari app/products/.',
+        cause: 'Komponen global di components/ui mengimpor data atau tipe dari app/users/.',
         solution: 'Global component dilarang bergantung pada modul domain. Gunakan generic props atau callback.',
       },
     ],
@@ -1666,36 +2429,36 @@ export const PHASE_GROUPS: PhaseGroup[] = [
   {
     id: 'fase-1',
     number: 1,
-    title: 'Fase 1: Frontend Architecture',
-    description: 'Pondasi App Router, component scoping (3-Scope Rule), struktur feature, dan form validation.',
+    title: 'Fase 1: Pondasi & Penyelarasan Arsitektur',
+    description: 'Standardisasi rute App Router, state boundary (loading & error), dan pembagian scope komponen 3-level.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-1'),
   },
   {
     id: 'fase-2',
     number: 2,
-    title: 'Fase 2: Data & Backend Engine',
-    description: 'Pemodelan skema database relasional, migrasi zero-drift, dan arsitektur berlapis Express.js.',
+    title: 'Fase 2: Gerbang Aplikasi (Auth & Dashboard Shell)',
+    description: 'Skema autentikasi pengguna, endpoint login/register, token cookie, dan proteksi layout dashboard.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-2'),
   },
   {
     id: 'fase-3',
     number: 3,
-    title: 'Fase 3: Fullstack Integration & Auth',
-    description: 'Integrasi API terpusat, autentikasi berbasis role (RBAC), dan reusable CRUD lifecycle.',
+    title: 'Fase 3: Siklus Fitur Vertikal (CRUD Master)',
+    description: 'Alur fitur hulu-ke-hilir: Skema database -> Query & Service -> Frontend View -> Form & Zod -> Revalidasi interaktif.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-3'),
   },
   {
     id: 'fase-4',
     number: 4,
-    title: 'Fase 4: Advanced Modules & Robustness',
-    description: 'Upload file dengan Multer, sinkronisasi URL search/pagination, dan hardening keamanan API.',
+    title: 'Fase 4: Pengayaan Fitur Dashboard',
+    description: 'Pencarian real-time, filter, sinkronisasi URL searchParams/pagination, dan upload media/file.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-4'),
   },
   {
     id: 'fase-5',
     number: 5,
-    title: 'Fase 5: Verification & DevOps',
-    description: 'Pengujian edge cases, Conventional Commits, Pull Request review, dan production deployment.',
+    title: 'Fase 5: Quality, Disiplin Git & Deployment',
+    description: 'Hardening keamanan API, penanganan error terpusat, pengujian, kolaborasi Pull Request, dan production deployment.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-5'),
   },
 ];

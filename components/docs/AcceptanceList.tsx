@@ -13,15 +13,25 @@ export function AcceptanceList({ moduleId, items }: AcceptanceListProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(`pbl_ac_${moduleId}`);
-      if (stored) {
-        setCheckedIds(JSON.parse(stored));
+    const handleSync = () => {
+      try {
+        const stored = localStorage.getItem(`pbl_ac_${moduleId}`);
+        if (stored) {
+          setCheckedIds(JSON.parse(stored));
+        }
+      } catch {
+        // LocalStorage not available or disabled
       }
-    } catch {
-      // LocalStorage not available or disabled
-    }
-    setIsLoaded(true);
+      setIsLoaded(true);
+    };
+
+    handleSync();
+    window.addEventListener('pbl_ac_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('pbl_ac_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, [moduleId]);
 
   const toggleItem = (id: string) => {
@@ -32,6 +42,7 @@ export function AcceptanceList({ moduleId, items }: AcceptanceListProps) {
     setCheckedIds(nextState);
     try {
       localStorage.setItem(`pbl_ac_${moduleId}`, JSON.stringify(nextState));
+      window.dispatchEvent(new Event('pbl_ac_updated'));
     } catch {
       // Ignore storage errors
     }

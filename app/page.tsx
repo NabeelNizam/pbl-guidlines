@@ -25,8 +25,16 @@ export default function HomePage() {
             <TaskHeroButton />
 
             <Link
+              href="/criteria"
+              className="px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-800 hover:border-zinc-700 font-medium text-xs sm:text-sm transition-all active:scale-[0.99] inline-flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+              <span>Cek Kriteria Websitemu</span>
+            </Link>
+
+            <Link
               href="/blueprints"
-              className="px-6 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 font-medium text-xs sm:text-sm transition-all active:scale-[0.99]"
+              className="px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 font-medium text-xs sm:text-sm transition-all active:scale-[0.99]"
             >
               Lihat Blueprints Kasus
             </Link>

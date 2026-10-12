@@ -18,14 +18,14 @@ export default function DocsLayout({
         isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex-1 flex max-w-7xl w-full mx-auto">
+      <div className="flex-1 flex w-full relative">
         <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 min-w-0 px-4 sm:px-8 py-8 pb-24 sm:pb-28 lg:pl-72 xl:pr-72">
+        <main className="flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-8 pb-32 lg:pl-80 xl:pr-72">
           {children}
         </main>
       </div>

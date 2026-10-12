@@ -29,6 +29,43 @@ export interface CommonPitfall {
   solution: string;
 }
 
+export interface VisualReference {
+  figureNumber: number;
+  type: 'editor' | 'terminal' | 'browser' | 'postman' | 'diagram';
+  caption: string;
+  description: string;
+}
+
+export interface PracticalStep {
+  stepNumber: number;
+  title: string;
+  description: string;
+  instructions: string[];
+  fileTreeSnippet?: string;
+  codeSnippet?: CodeSnippet;
+  visualReference?: VisualReference;
+  verification?: {
+    action: string;
+    expectedResult: string;
+  };
+}
+
+export interface PracticalTask {
+  taskNumber: number;
+  title: string;
+  description: string;
+  isOptional?: boolean;
+  isConditional?: boolean;
+  steps: PracticalStep[];
+}
+
+export interface AdaptationMapping {
+  aspect: string;
+  universalExample: string;
+  projectExampleA: string;
+  projectExampleB: string;
+}
+
 export interface DocModule {
   slug: string;
   phaseId: string;
@@ -39,9 +76,15 @@ export interface DocModule {
   layer: LayerType;
   estimatedMinutes: number;
   
-  // 12 Standard Sections
+  // Panduan Inti
   tujuan: string;
   prasyarat: string[];
+  adaptationTable?: AdaptationMapping[];
+
+  // Format Praktikum Step-by-Step Modern (Vertical Flow)
+  practicalTasks?: PracticalTask[];
+
+  // Backward compatibility fields
   tasks: string[];
   steps: {
     title: string;
@@ -50,12 +93,12 @@ export interface DocModule {
   }[];
   fileTree: FileTreeItem[];
   codeSnippets: CodeSnippet[];
-  integration: {
+  integration?: {
     title: string;
     explanation: string;
     connectedWith: string[];
   };
-  testingGuide: {
+  testingGuide?: {
     manualSteps: string[];
     expectedResult: string;
   };

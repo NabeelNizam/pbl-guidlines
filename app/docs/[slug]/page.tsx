@@ -46,7 +46,7 @@ async function DocContent({
   return (
     <>
       <DocView module={mod} />
-      <TableOfContents />
+      <TableOfContents module={mod} />
     </>
   );
 }
