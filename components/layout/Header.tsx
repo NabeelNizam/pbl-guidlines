@@ -45,7 +45,7 @@ export function Header({ onToggleSidebar, isSidebarOpen }: HeaderProps) {
         {/* Right Nav */}
         <div className="flex items-center gap-5 text-xs font-medium text-zinc-400">
           <Link
-            href="/docs/01-app-router-page-structure"
+            href="/docs/01-setup-project"
             className={`transition-colors ${
               isDocs ? 'text-white font-semibold' : 'hover:text-white'
             }`}

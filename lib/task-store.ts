@@ -12,21 +12,14 @@ export interface TaskItem {
 }
 
 export const TASKS: TaskItem[] = [
-  { id: 'task-1', order: 1, slug: '01-app-router-page-structure', title: 'App Router & Page Structure', shortTitle: '01. App Router', phase: 'Fase 1' },
-  { id: 'task-2', order: 2, slug: '02-components-per-page-feature', title: 'Komponen per Halaman & 3-Scope', shortTitle: '02. Komponen', phase: 'Fase 1' },
-  { id: 'task-3', order: 3, slug: '03-feature-structure', title: 'Struktur Fitur Mandiri', shortTitle: '03. Struktur Fitur', phase: 'Fase 1' },
-  { id: 'task-4', order: 4, slug: '04-form-handling-validation', title: 'Form Handling & Validasi Zod', shortTitle: '04. Form & Validasi', phase: 'Fase 1' },
-  { id: 'task-5', order: 5, slug: '05-database-schema-migrations', title: 'Database Schema & Migrasi Prisma', shortTitle: '05. Database', phase: 'Fase 2' },
-  { id: 'task-6', order: 6, slug: '06-backend-express-architecture', title: 'Backend Express Architecture', shortTitle: '06. Express API', phase: 'Fase 2' },
-  { id: 'task-7', order: 7, slug: '07-frontend-backend-integration', title: 'Integrasi Frontend & Backend', shortTitle: '07. Integrasi API', phase: 'Fase 3' },
-  { id: 'task-8', order: 8, slug: '08-authentication-authorization', title: 'Autentikasi & Hak Akses JWT', shortTitle: '08. Auth & Akses', phase: 'Fase 3' },
-  { id: 'task-9', order: 9, slug: '09-crud-data-management', title: 'Operasi CRUD & State Management', shortTitle: '09. Operasi CRUD', phase: 'Fase 3' },
-  { id: 'task-10', order: 10, slug: '10-file-upload-storage', title: 'Upload File & Storage Lokal', shortTitle: '10. Upload File', phase: 'Fase 4' },
-  { id: 'task-11', order: 11, slug: '11-search-filter-pagination', title: 'Search, Filter, & Pagination', shortTitle: '11. Search & Paging', phase: 'Fase 4' },
-  { id: 'task-12', order: 12, slug: '12-error-handling-security', title: 'Error Handling Global & Keamanan', shortTitle: '12. Error & Security', phase: 'Fase 4' },
-  { id: 'task-13', order: 13, slug: '13-testing-verification', title: 'Testing & Quality Assurance', shortTitle: '13. Pengujian', phase: 'Fase 5' },
-  { id: 'task-14', order: 14, slug: '14-git-development-workflow', title: 'Git Workflow & Pull Request', shortTitle: '14. Alur Git & PR', phase: 'Fase 5' },
-  { id: 'task-15', order: 15, slug: '15-deployment-production', title: 'Deployment & Production Ready', shortTitle: '15. Deployment', phase: 'Fase 5' },
+  {
+    id: 'task-1',
+    order: 1,
+    slug: '01-setup-project',
+    title: 'Setup Project (Frontend Next.js & Backend Express TS)',
+    shortTitle: '01. Setup Project',
+    phase: 'Fase 1',
+  },
 ];
 
 const STORAGE_KEY = 'pbl_completed_tasks';

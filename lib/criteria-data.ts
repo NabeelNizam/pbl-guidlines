@@ -68,8 +68,8 @@ export const WEBSITE_CRITERIA_LIST: CriterionItem[] = [
     title: 'App Router & Route Grouping',
     shortDesc: 'Struktur rute terpetakan rapi menggunakan Next.js App Router dengan route grouping (misal (dashboard) dan (auth)) untuk isolasi layout tanpa mengotori URL browser.',
     howToVerify: 'Buka folder app/ (atau src/app/). Pastikan rute publik dan dashboard dipisah menggunakan folder grup bertanda kurung. URL di browser tetap bersih tanpa prefix folder grup (misal: /dashboard, /users, /login).',
-    relatedModuleSlug: '01-app-router-page-structure',
-    relatedModuleTitle: '01. App Router & Page Structure',
+    relatedModuleSlug: '01-setup-project',
+    relatedModuleTitle: '01. Setup Project',
     isCore: true,
     codeSnippetExample: {
       filename: 'app/(dashboard)/layout.tsx',
@@ -139,8 +139,8 @@ export const createUserSchema = z.object({
     title: 'Optimasi SSR & React Server Components (RSC)',
     shortDesc: 'Halaman halaman utama secara default merupakan Server Component untuk direct data fetching yang cepat & aman. Direktif \'use client\' hanya diletakkan pada komponen interaktif terluar (leaf nodes).',
     howToVerify: 'Periksa file page.tsx. Pastikan tidak ada deklarasi \'use client\' di level root page kecuali benar-benar membutuhkan state browser. Fetch data utama dilakukan langsung di server component tanpa hook useEffect waterfall.',
-    relatedModuleSlug: '01-app-router-page-structure',
-    relatedModuleTitle: '01. App Router & Page Structure',
+    relatedModuleSlug: '01-setup-project',
+    relatedModuleTitle: '01. Setup Project',
     isCore: true,
     codeSnippetExample: {
       filename: 'app/(dashboard)/users/page.tsx',

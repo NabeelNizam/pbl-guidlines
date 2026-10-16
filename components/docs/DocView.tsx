@@ -101,37 +101,28 @@ export function DocView({ module: mod }: DocViewProps) {
           {mod.subtitle}
         </p>
 
-        {/* Ringkasan Tujuan & Prasyarat */}
-        <div className="mt-4 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs space-y-3">
-          <div className="text-zinc-300 leading-relaxed">
-            <span className="font-semibold text-white mr-1.5 font-sidebar">Tujuan:</span>
-            {mod.tujuan}
-          </div>
-
-          {mod.prasyarat && mod.prasyarat.length > 0 && (
-            <div className="pt-2 border-t border-zinc-900">
-              <span className="font-semibold text-zinc-400 mr-1.5 font-sidebar block mb-1">
-                Prasyarat:
-              </span>
-              <ul className="list-disc list-inside space-y-0.5 text-zinc-300 text-[11px]">
-                {mod.prasyarat.map((pra, idx) => (
-                  <li key={idx}>{pra}</li>
-                ))}
-              </ul>
+        {/* Ringkasan Tujuan & Prasyarat (hanya jika mode legacy tanpa practicalTasks) */}
+        {!hasPracticalTasks && (
+          <div className="mt-4 p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-xs space-y-3">
+            <div className="text-zinc-300 leading-relaxed">
+              <span className="font-semibold text-white mr-1.5 font-sidebar">Tujuan:</span>
+              {mod.tujuan}
             </div>
-          )}
 
-          {mod.tasks && mod.tasks.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-zinc-900 text-[11px] text-zinc-400 font-mono">
-              <span className="text-zinc-500 font-sidebar">Tasks:</span>
-              {mod.tasks.map((task, idx) => (
-                <span key={idx} className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">
-                  {task}
+            {mod.prasyarat && mod.prasyarat.length > 0 && (
+              <div className="pt-2 border-t border-zinc-900">
+                <span className="font-semibold text-zinc-400 mr-1.5 font-sidebar block mb-1">
+                  Prasyarat:
                 </span>
-              ))}
-            </div>
-          )}
-        </div>
+                <ul className="list-disc list-inside space-y-0.5 text-zinc-300 text-[11px]">
+                  {mod.prasyarat.map((pra, idx) => (
+                    <li key={idx}>{pra}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Global Expand / Collapse Control (Legacy Only) */}
         {!hasPracticalTasks && (
@@ -164,13 +155,6 @@ export function DocView({ module: mod }: DocViewProps) {
       {mod.adaptationTable && mod.adaptationTable.length > 0 && (
         <div className="my-6">
           <AdaptationTableCard mappings={mod.adaptationTable} />
-        </div>
-      )}
-
-      {/* PILIHAN STRUKTUR FOLDER (DENGAN SRC VS TANPA SRC) */}
-      {hasPracticalTasks && (
-        <div className="my-6">
-          <DirectoryModeToggle />
         </div>
       )}
 

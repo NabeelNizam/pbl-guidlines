@@ -673,7 +673,7 @@ export function CriteriaView() {
             <span>Salin Format Laporan ke Dosen</span>
           </button>
           <Link
-            href="/docs/01-app-router-page-structure"
+            href="/docs/01-setup-project"
             className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium transition-colors"
           >
             Buka Modul Dokumentasi &rarr;

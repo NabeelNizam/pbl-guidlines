@@ -17,29 +17,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // Concise titles for clean sidebar navigation
   const shortTitles: Record<string, string> = {
-    '01-app-router-page-structure': '01. App Router',
-    '02-components-per-page-feature': '02. Komponen',
-    '03-feature-structure': '03. Struktur Fitur',
-    '04-form-handling-validation': '04. Form & Validasi',
-    '05-database-schema-migrations': '05. Database & Migrasi',
-    '06-backend-express-architecture': '06. Express API',
-    '07-frontend-backend-integration': '07. Integrasi API',
-    '08-authentication-authorization': '08. Auth & Hak Akses',
-    '09-crud-data-management': '09. Operasi CRUD',
-    '10-file-upload-storage': '10. Upload File',
-    '11-search-filter-pagination': '11. Pencarian & Paging',
-    '12-error-handling-security': '12. Keamanan & Error',
-    '13-testing-verification': '13. Pengujian',
-    '14-git-development-workflow': '14. Alur Git & PR',
-    '15-deployment-production': '15. Deployment',
+    '01-setup-project': '01. Setup Project',
   };
 
   const phaseLabels: Record<string, string> = {
-    'fase-1': 'Fase 1 · Pondasi Arsitektur',
-    'fase-2': 'Fase 2 · Auth & Dashboard Shell',
-    'fase-3': 'Fase 3 · Siklus Fitur Vertikal',
-    'fase-4': 'Fase 4 · Pengayaan Fitur',
-    'fase-5': 'Fase 5 · Quality & Release',
+    'fase-1': 'Fase 1 · Inisialisasi & Setup Workspace',
   };
 
   return (

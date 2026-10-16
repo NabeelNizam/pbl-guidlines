@@ -11,10 +11,10 @@ export function TaskHeroButton() {
   if (!isLoaded) {
     return (
       <Link
-        href="/docs/01-app-router-page-structure"
+        href="/docs/01-setup-project"
         className="px-6 py-3 rounded-lg bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs sm:text-sm transition-all shadow-md active:scale-[0.99] inline-flex items-center gap-2"
       >
-        <span>Mulai Belajar (Modul 01)</span>
+        <span>Mulai Setup Project (Modul 01)</span>
         <ArrowRight className="w-4 h-4" />
       </Link>
     );
@@ -34,7 +34,7 @@ export function TaskHeroButton() {
             </span>
           </>
         ) : (
-          <span>Mulai Task 01: App Router &amp; Struktur</span>
+          <span>Mulai Task 01: Setup Project (FE &amp; BE)</span>
         )}
         <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
       </Link>

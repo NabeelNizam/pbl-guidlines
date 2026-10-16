@@ -44,7 +44,7 @@ export default function BlueprintsPage() {
                   <h2 className="text-base font-bold text-white">{bp.title}</h2>
                 </div>
                 <Link
-                  href="/docs/01-app-router-page-structure"
+                  href="/docs/01-setup-project"
                   className="text-xs text-zinc-400 hover:text-white"
                 >
                   Buka Modul 01 &rarr;
