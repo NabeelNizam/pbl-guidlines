@@ -123,15 +123,3 @@ export interface PhaseGroup {
   description: string;
   modules: DocModule[];
 }
-
-export interface BlueprintCase {
-  id: string;
-  title: string;
-  archetype: string;
-  description: string;
-  domainEntities: string[];
-  workflowMapping: {
-    stage: string;
-    implementation: string;
-  }[];
-}

@@ -3,7 +3,6 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { DOC_MODULES } from '@/lib/docs-data';
 import { DocView } from '@/components/docs/DocView';
-import { TableOfContents } from '@/components/layout/TableOfContents';
 
 export async function generateStaticParams() {
   return DOC_MODULES.map((m) => ({
@@ -43,12 +42,7 @@ async function DocContent({
     notFound();
   }
 
-  return (
-    <>
-      <DocView module={mod} />
-      <TableOfContents module={mod} />
-    </>
-  );
+  return <DocView module={mod} />;
 }
 
 export default function DocPage({

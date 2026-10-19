@@ -31,13 +31,6 @@ export default function HomePage() {
               <span className="w-2 h-2 rounded-full bg-blue-400"></span>
               <span>Cek Kriteria Websitemu</span>
             </Link>
-
-            <Link
-              href="/blueprints"
-              className="px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 font-medium text-xs sm:text-sm transition-all active:scale-[0.99]"
-            >
-              Lihat Blueprints Kasus
-            </Link>
           </div>
 
           {/* Standard Pipeline Showcase */}

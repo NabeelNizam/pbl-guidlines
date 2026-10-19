@@ -25,7 +25,7 @@ export default function DocsLayout({
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-8 pb-32 lg:pl-80 xl:pr-72">
+        <main className="flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-8 pb-32 lg:pl-80">
           {children}
         </main>
       </div>

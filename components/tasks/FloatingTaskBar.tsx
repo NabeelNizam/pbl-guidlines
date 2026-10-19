@@ -364,7 +364,7 @@ export function FloatingTaskBar() {
               </div>
             </button>
           ) : (
-            /* Fallback for non-doc pages (homepage, blueprints) */
+            /* Fallback for non-doc pages (e.g. homepage) */
             <div className="flex items-center gap-2">
               <span className="font-mono text-[11px] font-semibold text-white whitespace-nowrap">
                 Task {displayTask.order}:

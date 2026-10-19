@@ -1,11 +1,11 @@
-import { PhaseGroup, DocModule, BlueprintCase } from '@/types/docs';
+import { PhaseGroup, DocModule } from '@/types/docs';
 
 export const DOC_MODULES: DocModule[] = [
   {
     slug: '01-setup-project',
     phaseId: 'fase-1',
     order: 1,
-    title: '01. Setup Project',
+    title: 'Setup Project',
     subtitle: 'Setup direktori utama, Frontend Next.js, dan Backend Express TypeScript.',
     category: 'core-standard',
     layer: 'frontend',
@@ -39,7 +39,7 @@ export const DOC_MODULES: DocModule[] = [
       // -------------------------------------------------------------
       {
         taskNumber: 1,
-        title: 'Setup Folder Project',
+        title: 'Setup Folder',
         description: 'Buat folder utama untuk menampung frontend dan backend:',
         steps: [
           {
@@ -67,7 +67,7 @@ cd Siabsensi`,
       // -------------------------------------------------------------
       {
         taskNumber: 2,
-        title: 'Checkpoint 1: Setup FE (Frontend)',
+        title: 'Setup FrontEnd',
         description: 'Inisialisasi frontend menggunakan Next.js:',
         steps: [
           {
@@ -124,7 +124,7 @@ npm run dev`,
       // -------------------------------------------------------------
       {
         taskNumber: 3,
-        title: 'Checkpoint 2: Setup BE (Backend)',
+        title: 'Setup Backend',
         description: 'Setup backend Express dengan TypeScript:',
         steps: [
           {
@@ -241,7 +241,7 @@ app.listen(port, () => {
       // -------------------------------------------------------------
       {
         taskNumber: 4,
-        title: 'Checkpoint 3: Koneksi Database & Migration (Sequelize TS)',
+        title: 'Koneksi DB & Migration',
         description: 'Konfigurasi Sequelize TypeScript, dotenv, dan migrasi tabel basis data:',
         steps: [
           {
@@ -351,7 +351,7 @@ startServer();`,
           {
             stepNumber: 5,
             title: 'Buat File Migration Contoh (src/db/migrations/001-create-users.ts)',
-            description: 'Buat blueprint skema tabel pertama:',
+            description: 'Buat skema tabel pertama:',
             instructions: [
               'PERHATIAN PENTING: Struktur tabel "users" berikut adalah CONTOH UMUM.',
               'Setiap kelompok WAJIB memodifikasi nama tabel, kolom, tipe data, dan relasi sesuai ERD proyek kelompok masing-masing.',
@@ -359,7 +359,7 @@ startServer();`,
             codeSnippet: {
               filename: 'be/src/db/migrations/001-create-users.ts',
               language: 'typescript',
-              description: 'Blueprint migration tabel users',
+              description: 'Migration tabel users',
               code: `import { QueryInterface, DataTypes } from 'sequelize';
 
 export default {
@@ -462,7 +462,7 @@ runMigrations();`,
       // -------------------------------------------------------------
       {
         taskNumber: 5,
-        title: 'Checkpoint 4: Setup Seeder / Data Awal (Sequelize TS)',
+        title: 'Setup Seeder',
         description: 'Injeksi data awal (dummy/master data) ke database menggunakan seeder:',
         steps: [
           {
@@ -476,7 +476,7 @@ runMigrations();`,
             codeSnippet: {
               filename: 'be/src/db/seeders/001-seed-users.ts',
               language: 'typescript',
-              description: 'Blueprint seeder data awal users',
+              description: 'Seeder data awal users',
               code: `import { QueryInterface } from 'sequelize';
 
 export default {
@@ -572,9 +572,9 @@ runSeeders();`,
       { path: 'be/src/index.ts', type: 'file', status: 'added', description: 'Backend Express TypeScript (Port 5000)' },
       { path: 'be/.env', type: 'file', status: 'added', description: 'Konfigurasi Environment Variable DB' },
       { path: 'be/src/db/config/database.ts', type: 'file', status: 'added', description: 'Koneksi Sequelize MySQL' },
-      { path: 'be/src/db/migrations/001-create-users.ts', type: 'file', status: 'added', description: 'Migration Schema Tabel (Blueprint)' },
+      { path: 'be/src/db/migrations/001-create-users.ts', type: 'file', status: 'added', description: 'Migration Schema Tabel' },
       { path: 'be/src/db/migrations/run.ts', type: 'file', status: 'added', description: 'Runner Migration' },
-      { path: 'be/src/db/seeders/001-seed-users.ts', type: 'file', status: 'added', description: 'Seeder Data Awal (Blueprint)' },
+      { path: 'be/src/db/seeders/001-seed-users.ts', type: 'file', status: 'added', description: 'Seeder Data Awal' },
       { path: 'be/src/db/seeders/run.ts', type: 'file', status: 'added', description: 'Runner Seeder' },
     ],
     codeSnippets: [],
@@ -625,25 +625,5 @@ export const PHASE_GROUPS: PhaseGroup[] = [
     title: 'Fase 1: Setup Proyek',
     description: 'Inisialisasi workspace: Frontend Next.js dan Backend Express TypeScript.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-1'),
-  },
-];
-
-export const BLUEPRINTS: BlueprintCase[] = [
-  {
-    id: 'siabsensi',
-    title: 'Contoh Proyek: Siabsensi',
-    archetype: 'Sistem Informasi & Presensi',
-    description: 'Workspace monorepo dengan frontend/ dan be/.',
-    domainEntities: ['User', 'Presensi', 'Kelas'],
-    workflowMapping: [
-      {
-        stage: 'Frontend',
-        implementation: 'Next.js App Router di port 3000.',
-      },
-      {
-        stage: 'Backend',
-        implementation: 'Express TypeScript di port 5000.',
-      },
-    ],
   },
 ];

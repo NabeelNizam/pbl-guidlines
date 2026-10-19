@@ -10,9 +10,10 @@ import { useDirectoryMode } from '@/components/docs/DirectoryModeToggle';
 interface PracticalTaskStepperProps {
   task: PracticalTask;
   moduleId: string;
+  hideHeader?: boolean;
 }
 
-export function PracticalTaskStepper({ task, moduleId }: PracticalTaskStepperProps) {
+export function PracticalTaskStepper({ task, moduleId, hideHeader }: PracticalTaskStepperProps) {
   const [completedSteps, setCompletedSteps] = useState<Record<number, boolean>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const { mode } = useDirectoryMode();
@@ -106,87 +107,89 @@ export function PracticalTaskStepper({ task, moduleId }: PracticalTaskStepperPro
 
   return (
     <div className="space-y-6">
-      {/* Task Header & Mini Roadmap Card */}
-      <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-md">
-        <div
-          onClick={task.isConditional ? () => setIsOpen(!isOpen) : undefined}
-          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-850 select-none ${
-            task.isConditional ? 'cursor-pointer hover:opacity-95 transition-opacity' : ''
-          }`}
-        >
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-2.5 py-1 rounded-md bg-blue-600 text-white font-mono font-bold text-xs uppercase tracking-wider">
-              TASK {task.taskNumber}
-            </span>
-            {task.isConditional ? (
-              <span className="px-2.5 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-[10px] font-bold uppercase tracking-wider">
-                KONDISIONAL
-              </span>
-            ) : task.isOptional ? (
-              <span className="px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px] font-bold uppercase tracking-wider">
-                OPSIONAL
-              </span>
-            ) : null}
-            <h2 className="text-lg sm:text-xl font-bold text-white font-sidebar tracking-tight">
-              {task.title}
-            </h2>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-zinc-400">
-              {Object.values(completedSteps).filter(Boolean).length} dari {task.steps.length} langkah selesai
-            </span>
-
-            {task.isConditional && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-300">
-                <span>{isOpen ? 'Tutup' : 'Buka'}</span>
-                <svg
-                  className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-300 ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <p className="text-xs sm:text-sm text-zinc-400 font-content leading-relaxed mt-3">
-          {task.description}
-        </p>
-
-        {/* If conditional and collapsed: show callout to expand */}
-        {task.isConditional && !isOpen && (
-          <button
-            type="button"
-            onClick={() => setIsOpen(true)}
-            className="w-full mt-4 p-4 rounded-xl border border-dashed border-purple-500/40 bg-purple-950/10 hover:bg-purple-950/25 transition-all cursor-pointer flex items-center justify-between gap-3 text-left group"
+      {/* Task Header & Mini Roadmap Card (hidden in wizard mode) */}
+      {!hideHeader && (
+        <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-md">
+          <div
+            onClick={task.isConditional ? () => setIsOpen(!isOpen) : undefined}
+            className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-850 select-none ${
+              task.isConditional ? 'cursor-pointer hover:opacity-95 transition-opacity' : ''
+            }`}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-purple-900/40 border border-purple-700/50 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              <div>
-                <span className="font-bold text-purple-300 text-xs block">
-                  Langkah Praktikum Kondisional (Tertutup)
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="px-2.5 py-1 rounded-md bg-blue-600 text-white font-mono font-bold text-xs uppercase tracking-wider">
+                TASK {task.taskNumber}
+              </span>
+              {task.isConditional ? (
+                <span className="px-2.5 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-[10px] font-bold uppercase tracking-wider">
+                  KONDISIONAL
                 </span>
-                <span className="text-[11px] text-zinc-400 font-content">
-                  Klik di sini untuk membuka {task.steps.length} langkah implementasi rute manajemen pengguna.
+              ) : task.isOptional ? (
+                <span className="px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px] font-bold uppercase tracking-wider">
+                  OPSIONAL
                 </span>
-              </div>
+              ) : null}
+              <h2 className="text-lg sm:text-xl font-bold text-white font-sidebar tracking-tight">
+                {task.title}
+              </h2>
             </div>
-            <span className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors shrink-0 shadow-xs">
-              Buka Langkah ↓
-            </span>
-          </button>
-        )}
-      </div>
+
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-mono text-zinc-400">
+                {Object.values(completedSteps).filter(Boolean).length} dari {task.steps.length} langkah selesai
+              </span>
+
+              {task.isConditional && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-300">
+                  <span>{isOpen ? 'Tutup' : 'Buka'}</span>
+                  <svg
+                    className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-300 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <p className="text-xs sm:text-sm text-zinc-400 font-content leading-relaxed mt-3">
+            {task.description}
+          </p>
+
+          {/* If conditional and collapsed: show callout to expand */}
+          {task.isConditional && !isOpen && (
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="w-full mt-4 p-4 rounded-xl border border-dashed border-purple-500/40 bg-purple-950/10 hover:bg-purple-950/25 transition-all cursor-pointer flex items-center justify-between gap-3 text-left group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-900/40 border border-purple-700/50 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div>
+                  <span className="font-bold text-purple-300 text-xs block">
+                    Langkah Praktikum Kondisional (Tertutup)
+                  </span>
+                  <span className="text-[11px] text-zinc-400 font-content">
+                    Klik di sini untuk membuka {task.steps.length} langkah implementasi rute manajemen pengguna.
+                  </span>
+                </div>
+              </div>
+              <span className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors shrink-0 shadow-xs">
+                Buka Langkah ↓
+              </span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Main Timeline Stream: Direct Steps */}
       {isOpen && (
@@ -221,73 +224,44 @@ export function PracticalTaskStepper({ task, moduleId }: PracticalTaskStepperPro
                   className="relative z-10 shrink-0 cursor-pointer mt-0.5 transition-transform hover:scale-105 active:scale-95"
                 >
                   {isCompleted ? (
-                    /* Completed Badge: Solid green circle with white checkmark */
-                    <div className="w-[36px] h-[36px] sm:w-[38px] sm:h-[38px] rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/25">
-                      <svg className="w-5 h-5 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
+                    /* Completed: Clean emerald circle with checkmark */
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs sm:text-sm">
+                      ✓
                     </div>
                   ) : isActive ? (
-                    /* Active Badge: Blue Concentric Halo Ring with 4-square icon */
-                    <div className="w-[36px] h-[36px] sm:w-[38px] sm:h-[38px] rounded-full border-2 border-blue-500 bg-blue-500/10 flex items-center justify-center ring-4 ring-blue-500/20 shadow-lg shadow-blue-500/25">
-                      <div className="w-[22px] h-[22px] rounded-full bg-blue-600 text-white flex items-center justify-center">
-                        <div className="grid grid-cols-2 gap-0.5 w-2.5 h-2.5">
-                          <span className="w-1 h-1 bg-white rounded-xs"></span>
-                          <span className="w-1 h-1 bg-white rounded-xs"></span>
-                          <span className="w-1 h-1 bg-white rounded-xs"></span>
-                          <span className="w-1 h-1 bg-white rounded-xs"></span>
-                        </div>
-                      </div>
+                    /* Active: Clean solid white circle with dark number */
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white text-zinc-950 flex items-center justify-center font-bold text-xs sm:text-sm shadow-md">
+                      {st.stepNumber}
                     </div>
                   ) : (
-                    /* Pending Badge: Muted outline circle with step number */
-                    <div className="w-[36px] h-[36px] sm:w-[38px] sm:h-[38px] rounded-full border-2 border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-500 flex items-center justify-center font-mono font-bold text-xs sm:text-sm">
+                    /* Pending: Clean outline circle with step number */
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-500 flex items-center justify-center font-mono font-semibold text-xs sm:text-sm">
                       {st.stepNumber}
                     </div>
                   )}
                 </button>
 
-                {/* Step Sub-label & Main Title */}
+                {/* Step Main Title */}
                 <div className="flex-1 min-w-0 pt-0.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span
-                      className={`text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase ${
+                    <h3
+                      className={`text-base sm:text-lg font-bold font-sidebar tracking-tight ${
                         isCompleted
-                          ? 'text-emerald-400'
+                          ? 'text-zinc-200'
                           : isActive
-                          ? 'text-blue-400'
-                          : 'text-zinc-500'
+                          ? 'text-white'
+                          : 'text-zinc-300'
                       }`}
                     >
-                      STEP {st.stepNumber}
-                    </span>
+                      {st.title}
+                    </h3>
 
-                    {isCompleted ? (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-900/60 px-2.5 py-0.5 rounded-md">
-                        <svg className="w-3 h-3 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Selesai</span>
+                    {isCompleted && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-900/60 px-2 py-0.5 rounded-md">
+                        ✓ Selesai
                       </span>
-                    ) : isActive ? (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-blue-400 bg-blue-950/60 border border-blue-900/60 px-2.5 py-0.5 rounded-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-                        Langkah Aktif
-                      </span>
-                    ) : null}
+                    )}
                   </div>
-
-                  <h3
-                    className={`text-base sm:text-lg font-bold font-sidebar tracking-tight mt-0.5 ${
-                      isCompleted
-                        ? 'text-zinc-200'
-                        : isActive
-                        ? 'text-white'
-                        : 'text-zinc-300'
-                    }`}
-                  >
-                    {st.title}
-                  </h3>
                 </div>
               </div>
 

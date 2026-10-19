@@ -14,7 +14,6 @@ export function Header({ onToggleSidebar, isSidebarOpen }: HeaderProps) {
   const pathname = usePathname();
 
   const isDocs = pathname?.startsWith('/docs');
-  const isBlueprints = pathname?.startsWith('/blueprints');
   const isCriteria = pathname?.startsWith('/criteria') || pathname?.startsWith('/kriteria');
 
   return (
@@ -51,14 +50,6 @@ export function Header({ onToggleSidebar, isSidebarOpen }: HeaderProps) {
             }`}
           >
             Dokumentasi
-          </Link>
-          <Link
-            href="/blueprints"
-            className={`transition-colors ${
-              isBlueprints ? 'text-white font-semibold' : 'hover:text-white'
-            }`}
-          >
-            Blueprints
           </Link>
           <Link
             href="/criteria"
