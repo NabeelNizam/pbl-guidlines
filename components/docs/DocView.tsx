@@ -6,7 +6,7 @@ import { DocModule } from '@/types/docs';
 import { AcceptanceList } from '@/components/docs/AcceptanceList';
 import { GitWorkflowCard } from '@/components/docs/GitWorkflowCard';
 import { PracticalTaskStepper } from '@/components/docs/PracticalTaskStepper';
-import { useWizardProgress, ALL_WIZARD_STEPS, WIZARD_SECTIONS } from '@/lib/wizard-store';
+import { useWizardProgress } from '@/lib/wizard-store';
 
 interface DocViewProps {
   module: DocModule;
@@ -21,18 +21,20 @@ export function DocView({ module: mod }: DocViewProps) {
     totalSteps,
     completedCount,
     progressPercent,
-  } = useWizardProgress();
+    sections,
+    allSteps,
+  } = useWizardProgress(mod.slug);
 
   const practicalTasks = mod.practicalTasks || [];
 
   // Determine current active task/item in wizard
-  const currentStepItem = ALL_WIZARD_STEPS.find((s) => s.id === activeStep) || ALL_WIZARD_STEPS[0];
-  const currentSection = WIZARD_SECTIONS.find((sec) => sec.steps.some((s) => s.id === activeStep)) || WIZARD_SECTIONS[0];
+  const currentStepItem = allSteps.find((s) => s.id === activeStep) || allSteps[0];
+  const currentSection = sections.find((sec) => sec.steps.some((s) => s.id === activeStep)) || sections[0];
   const activeTask = practicalTasks.find((t) => t.taskNumber === activeStep);
   const isCurrentCompleted = isStepCompleted(activeStep);
 
-  const prevStepItem = ALL_WIZARD_STEPS.find((s) => s.id === activeStep - 1);
-  const nextStepItem = ALL_WIZARD_STEPS.find((s) => s.id === activeStep + 1);
+  const prevStepItem = allSteps.find((s) => s.id === activeStep - 1);
+  const nextStepItem = allSteps.find((s) => s.id === activeStep + 1);
 
   const handleNextOrFinish = () => {
     markStepCompleted(activeStep);
@@ -80,14 +82,14 @@ export function DocView({ module: mod }: DocViewProps) {
         </div>
 
         {/* Steps of the active task */}
-        {activeStep <= 5 && activeTask && (
+        {currentStepItem.taskId !== 'git-kriteria' && activeTask && (
           <section className="pt-2">
             <PracticalTaskStepper task={activeTask} moduleId={mod.slug} hideHeader />
           </section>
         )}
 
-        {/* Step 6: Git & Kriteria Selesai */}
-        {activeStep === 6 && (
+        {/* Step Final: Git & Kriteria Selesai */}
+        {currentStepItem.taskId === 'git-kriteria' && (
           <div className="space-y-8 pt-2">
             <div>
               <h3 className="text-sm font-semibold text-zinc-300 font-sidebar mb-3">

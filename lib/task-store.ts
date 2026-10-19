@@ -20,6 +20,14 @@ export const TASKS: TaskItem[] = [
     shortTitle: '01. Setup Project',
     phase: 'Fase 1',
   },
+  {
+    id: 'task-2',
+    order: 2,
+    slug: '02-form-handling',
+    title: 'Form Handling, Validasi Schema, dan Mutasi Data',
+    shortTitle: '02. Form & Validasi',
+    phase: 'Fase 2',
+  },
 ];
 
 const STORAGE_KEY = 'pbl_completed_tasks';

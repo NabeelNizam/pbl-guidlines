@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useWizardProgress } from '@/lib/wizard-store';
 
@@ -12,12 +13,18 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { sections, activeStep, setActiveStep, isStepCompleted } = useWizardProgress();
+
+  // Extract active module slug from pathname, default to '01-setup-project'
+  const currentSlug = pathname?.startsWith('/docs/')
+    ? pathname.replace('/docs/', '').split('#')[0].split('/')[0] || '01-setup-project'
+    : '01-setup-project';
+
+  const { sections, activeStep, setActiveStep, isStepCompleted } = useWizardProgress(currentSlug);
 
   const handleStepClick = (stepId: number, taskId: string) => {
     setActiveStep(stepId);
-    if (!pathname?.startsWith('/docs/01-setup-project')) {
-      router.push(`/docs/01-setup-project#${taskId}`);
+    if (!pathname?.startsWith(`/docs/${currentSlug}`)) {
+      router.push(`/docs/${currentSlug}#${taskId}`);
     } else {
       window.location.hash = taskId;
     }
@@ -41,6 +48,51 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         }`}
       >
         <div className="py-6 px-4 space-y-7">
+          {/* Module Switcher */}
+          <div className="space-y-1.5 pb-4 border-b border-zinc-800/80">
+            <span className="px-2 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold block">
+              Pilih Modul Materi
+            </span>
+            <div className="space-y-1">
+              <Link
+                href="/docs/01-setup-project"
+                onClick={onClose}
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
+                  currentSlug === '01-setup-project'
+                    ? 'bg-zinc-800 text-white font-medium'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
+                }`}
+              >
+                <div className="truncate">
+                  <span className="text-[10px] text-zinc-500 block font-mono">MODUL 01</span>
+                  <span className="truncate">Setup Proyek &amp; Auth</span>
+                </div>
+                {currentSlug === '01-setup-project' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                )}
+              </Link>
+
+              <Link
+                href="/docs/02-form-handling"
+                onClick={onClose}
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
+                  currentSlug === '02-form-handling'
+                    ? 'bg-zinc-800 text-white font-medium'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
+                }`}
+              >
+                <div className="truncate">
+                  <span className="text-[10px] text-zinc-500 block font-mono">MODUL 02</span>
+                  <span className="truncate">Form &amp; Validasi Data</span>
+                </div>
+                {currentSlug === '02-form-handling' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                )}
+              </Link>
+            </div>
+          </div>
+
+          {/* Stepper Sections for active module */}
           {sections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-2.5">
               {/* Section Header */}
@@ -65,7 +117,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                           : 'text-zinc-400 hover:text-white hover:bg-zinc-900/40 font-normal'
                       }`}
                     >
-                      {/* Circled Number / Checkmark (no weird icons) */}
+                      {/* Circled Number / Checkmark */}
                       <span className="shrink-0 flex items-center justify-center">
                         {isDone ? (
                           <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-[10px] font-bold">
