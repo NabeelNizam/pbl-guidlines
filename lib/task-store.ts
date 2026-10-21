@@ -24,8 +24,8 @@ export const TASKS: TaskItem[] = [
     id: 'task-2',
     order: 2,
     slug: '02-form-handling',
-    title: 'Form Handling, Validasi Schema, dan Mutasi Data',
-    shortTitle: '02. Form & Validasi',
+    title: 'Form Handling, Autentikasi DAL, & Mutasi Data (Fullstack CRUD)',
+    shortTitle: '02. Form, Auth & Mutasi',
     phase: 'Fase 2',
   },
 ];

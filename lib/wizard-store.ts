@@ -50,33 +50,50 @@ export const WIZARD_SECTIONS_BY_MODULE: Record<string, WizardSection[]> = {
   ],
   '02-form-handling': [
     {
-      title: 'Persiapan & Schema',
+      title: 'Perencanaan & Sistem Login',
       steps: [
-        { id: 1, taskId: 'task-1', title: 'Tentukan Fitur & Pasang Zod', shortLabel: '1. Fitur & Zod' },
-        { id: 2, taskId: 'task-2', title: 'Buat Schema Validasi Zod', shortLabel: '2. Schema Zod' },
+        { id: 1, taskId: 'task-1', title: 'Langkah 1: Tentukan Fitur & Aturan Akses (Perencanaan)', shortLabel: '1. Rencana & Aturan Akses' },
+        { id: 2, taskId: 'task-2', title: 'Langkah 2: Pasang Sistem Login (BE)', shortLabel: '2. Pasang Sistem Login' },
+        { id: 3, taskId: 'task-3', title: 'Langkah 3: Buat Halaman Login & Daftar (FE)', shortLabel: '3. Halaman Login/Daftar' },
       ],
     },
     {
-      title: 'Server Action & Form',
+      title: 'DAL & Schema Validasi',
       steps: [
-        { id: 3, taskId: 'task-3', title: 'Buat Server Action', shortLabel: '3. Server Action' },
-        { id: 4, taskId: 'task-4', title: 'Komponen Form (useActionState)', shortLabel: '4. Komponen Form' },
+        { id: 4, taskId: 'task-4', title: 'Langkah 4: Buat DAL dan Pagar Proxy (BE)', shortLabel: '4. DAL & Pagar Proxy' },
+        { id: 5, taskId: 'task-5', title: 'Langkah 5: Buat Schema Validasi (Dipakai Bersama)', shortLabel: '5. Schema Validasi' },
       ],
     },
     {
-      title: 'Mutasi DB & Revalidasi',
+      title: 'Server Action & Form Handling',
       steps: [
-        { id: 5, taskId: 'task-5', title: 'Pasang Query Mutasi Database', shortLabel: '5. Mutasi Database' },
-        { id: 6, taskId: 'task-6', title: 'Revalidasi Path Cache', shortLabel: '6. Revalidasi Path' },
-        { id: 7, taskId: 'task-7', title: 'Uji Coba Form di Browser', shortLabel: '7. Uji Coba Form' },
+        { id: 6, taskId: 'task-6', title: 'Langkah 6: Buat File Server Action (BE)', shortLabel: '6. File Server Action' },
+        { id: 7, taskId: 'task-7', title: 'Langkah 7: Tambahkan Validasi Zod di Action (BE)', shortLabel: '7. Validasi Zod di Action' },
+        { id: 8, taskId: 'task-8', title: 'Langkah 8: Buat Form Input (FE)', shortLabel: '8. Form Input' },
+        { id: 9, taskId: 'task-9', title: 'Langkah 9: Hubungkan Form dengan Action (useActionState)', shortLabel: '9. Form & Action State' },
+        { id: 10, taskId: 'task-10', title: 'Langkah 10: Tampilkan Error Validasi (FE)', shortLabel: '10. Tampilkan Error' },
       ],
     },
     {
-      title: 'Fitur Hapus & Eksplorasi',
+      title: 'Mutasi Data, Revalidasi & Testing',
       steps: [
-        { id: 8, taskId: 'task-8', title: 'Fitur Hapus / Delete', shortLabel: '8. Fitur Hapus' },
-        { id: 9, taskId: 'task-9', title: 'Pengembangan Lanjutan (Opsional)', shortLabel: '9. Fitur Lanjutan' },
-        { id: 10, taskId: 'git-kriteria', title: 'Git & Kriteria Selesai', shortLabel: '10. Git & Kriteria Selesai' },
+        { id: 11, taskId: 'task-11', title: 'Langkah 11: Implementasikan Mutation (Simpan Data) (BE)', shortLabel: '11. Mutasi Simpan Data' },
+        { id: 12, taskId: 'task-12', title: 'Langkah 12: Tambahkan Revalidasi (BE)', shortLabel: '12. Revalidasi Cache' },
+        { id: 13, taskId: 'task-13', title: 'Langkah 13: Uji Fitur (FE + BE) - 5 Checkpoint', shortLabel: '13. Uji 5 Checkpoint' },
+      ],
+    },
+    {
+      title: 'Proteksi IDOR, Admin & Optimistic UI',
+      steps: [
+        { id: 14, taskId: 'task-14', title: 'Langkah 14: Implementasikan Update & Delete Berpagar IDOR', shortLabel: '14. Update & Delete IDOR' },
+        { id: 15, taskId: 'task-15', title: 'Langkah 15: Batasi Aksi Khusus Admin (BE)', shortLabel: '15. Aksi Khusus Admin' },
+        { id: 16, taskId: 'task-16', title: 'Langkah 16: Pengembangan Optimistic UI (FE, Opsional)', shortLabel: '16. Optimistic UI' },
+      ],
+    },
+    {
+      title: 'Review & Standar',
+      steps: [
+        { id: 17, taskId: 'git-kriteria', title: 'Git & Kriteria Selesai', shortLabel: '17. Git & Kriteria Selesai' },
       ],
     },
   ],

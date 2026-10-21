@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function KriteriaRedirectPage() {
-  redirect('/criteria');
+  redirect('/docs/01-setup-project');
 }

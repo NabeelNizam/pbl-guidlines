@@ -83,7 +83,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               >
                 <div className="truncate">
                   <span className="text-[10px] text-zinc-500 block font-mono">MODUL 02</span>
-                  <span className="truncate">Form &amp; Validasi Data</span>
+                  <span className="truncate">Form, Auth &amp; Mutasi Data</span>
                 </div>
                 {currentSlug === '02-form-handling' && (
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>

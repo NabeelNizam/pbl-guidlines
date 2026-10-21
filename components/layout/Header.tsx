@@ -14,7 +14,6 @@ export function Header({ onToggleSidebar, isSidebarOpen }: HeaderProps) {
   const pathname = usePathname();
 
   const isDocs = pathname?.startsWith('/docs');
-  const isCriteria = pathname?.startsWith('/criteria') || pathname?.startsWith('/kriteria');
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-zinc-800/80 bg-black/90 backdrop-blur-md font-sidebar">
@@ -50,17 +49,6 @@ export function Header({ onToggleSidebar, isSidebarOpen }: HeaderProps) {
             }`}
           >
             Dokumentasi
-          </Link>
-          <Link
-            href="/criteria"
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-all ${
-              isCriteria
-                ? 'bg-blue-600/20 border-blue-500/50 text-blue-300 font-semibold'
-                : 'border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 text-zinc-300 hover:text-white'
-            }`}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-            <span>Cek Kriteria</span>
           </Link>
         </div>
       </div>
