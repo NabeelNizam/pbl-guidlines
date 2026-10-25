@@ -42,9 +42,20 @@ export const WIZARD_SECTIONS_BY_MODULE: Record<string, WizardSection[]> = {
       ],
     },
     {
+      title: 'Akses Publik & Kolaborasi Tim',
+      steps: [
+        {
+          id: 11,
+          taskId: 'task-11',
+          title: 'Checkpoint 10: Publikasi BE via Ngrok (Akses Publik)',
+          shortLabel: '11. Publikasi BE Ngrok',
+        },
+      ],
+    },
+    {
       title: 'Review & Standar',
       steps: [
-        { id: 11, taskId: 'git-kriteria', title: 'Git & Kriteria Selesai', shortLabel: '11. Git & Kriteria Selesai' },
+        { id: 12, taskId: 'git-kriteria', title: 'Git & Kriteria Selesai', shortLabel: '12. Git & Kriteria Selesai' },
       ],
     },
   ],

@@ -7,12 +7,12 @@ export const DOC_MODULES: DocModule[] = [
     phaseId: 'fase-1',
     order: 1,
     title: 'Setup Project',
-    subtitle: 'Setup direktori utama, Frontend Next.js, dan Backend Express TypeScript.',
+    subtitle: 'Setup direktori utama, Frontend Next.js, Backend Express TypeScript, dan publikasi API via Ngrok untuk kolaborasi tim.',
     category: 'core-standard',
     layer: 'frontend',
-    estimatedMinutes: 10,
-    tujuan: 'Setup proyek Frontend dan Backend.',
-    prasyarat: ['Node.js v18+', 'Terminal', 'VS Code'],
+    estimatedMinutes: 20,
+    tujuan: 'Setup proyek Frontend dan Backend, koneksi basis data, otentikasi JWT, serta publikasi API via Ngrok.',
+    prasyarat: ['Node.js v18+', 'Terminal', 'VS Code', 'Akun Ngrok'],
     tasks: [
       'Setup Folder Project',
       'Checkpoint 1: Setup FE',
@@ -23,7 +23,8 @@ export const DOC_MODULES: DocModule[] = [
       'Checkpoint 6: Setup Middlewares',
       'Checkpoint 7: Setup Controllers',
       'Checkpoint 8: Setup Routes & Server Entry',
-      'Checkpoint 9: Uji Coba Integrasi Auth FE & BE',
+      'Checkpoint 9: Uji Coba Integrasi Auth FE & BE (Lokal)',
+      'Checkpoint 10: Publikasikan BE ke Publik (Ngrok Tunneling)',
     ],
     adaptationTable: [
       {
@@ -1313,6 +1314,330 @@ npm run dev`,
           },
         ],
       },
+
+      // -------------------------------------------------------------
+      // TASK 11: Checkpoint 10 - Publikasi BE ke Publik (Ngrok Tunneling)
+      // -------------------------------------------------------------
+      {
+        taskNumber: 11,
+        title: 'Publikasi Backend via Ngrok (Akses Publik)',
+        description:
+          'Panduan mengekspos backend Express lokal (port 5000) menjadi URL publik HTTPS menggunakan Ngrok, sehingga frontend anggota tim yang berada di laptop berbeda dapat langsung tersambung dan berkolaborasi.',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'Langkah 1: Pastikan Express Berjalan Normal',
+            description:
+              'Sebelum membuka tunnel ke internet publik, pastikan server backend berjalan normal secara lokal di port 5000 dan endpoint API dapat diakses.',
+            instructions: [
+              'Buka jendela terminal di dalam folder backend (be).',
+              'Jalankan perintah: npm run dev',
+              'Pastikan Express berjalan di port 5000 dan endpoint API lokal (misal /api/users atau /api/todos) dapat diakses dengan normal.',
+            ],
+            codeSnippet: {
+              filename: 'terminal-backend',
+              language: 'bash',
+              description: 'Menjalankan backend di port 5000',
+              code: `cd be
+npm run dev`,
+            },
+            verification: {
+              action: 'Buka http://localhost:5000 di browser atau kirim request via Postman/curl',
+              expectedResult: 'Server Express merespons normal tanpa crash atau unhandled rejection.',
+            },
+          },
+          {
+            stepNumber: 2,
+            title: 'Langkah 2: Buat Akun Ngrok',
+            description:
+              'Daftar dan buat akun gratis di platform Ngrok untuk mendapatkan token otentikasi tunnel publik.',
+            instructions: [
+              'Buka peramban (browser) dan kunjungi https://ngrok.com.',
+              'Daftar akun baru (Sign Up) menggunakan akun Google, GitHub, atau email Anda.',
+              'Setelah berhasil mendaftar dan verifikasi email, login ke dashboard Ngrok.',
+            ],
+            verification: {
+              action: 'Akses https://dashboard.ngrok.com di peramban',
+              expectedResult: 'Halaman dashboard utama Ngrok terbuka dengan status akun aktif.',
+            },
+          },
+          {
+            stepNumber: 3,
+            title: 'Langkah 3: Install Ngrok',
+            description:
+              'Unduh dan pasang aplikasi Ngrok CLI sesuai dengan sistem operasi yang Anda gunakan.',
+            instructions: [
+              'Buka dokumentasi instalasi resmi di https://ngrok.com/docs/getting-started/.',
+              'Pilih metode instalasi sesuai OS Anda:',
+              'Windows: Unduh file ZIP dari web resmi lalu ekstrak ngrok.exe, atau gunakan package manager: winget install ngrok',
+              'macOS: Jalankan perintah brew: brew install ngrok/ngrok/ngrok',
+              'Linux: Pasang via apt atau snap sesuai petunjuk resmi.',
+            ],
+            codeSnippet: {
+              filename: 'terminal-install',
+              language: 'bash',
+              description: 'Perintah instalasi alternatif / verifikasi',
+              code: `# Untuk Windows (via winget):
+winget install ngrok
+
+# Untuk macOS (via brew):
+brew install ngrok/ngrok/ngrok
+
+# Verifikasi instalasi berhasil:
+ngrok --version`,
+            },
+            verification: {
+              action: 'Buka terminal baru dan jalankan "ngrok --version"',
+              expectedResult: 'Terminal menampilkan versi ngrok yang terpasang (contoh: ngrok version 3.x.x).',
+            },
+          },
+          {
+            stepNumber: 4,
+            title: 'Langkah 4: Hubungkan Ngrok dengan Akun (Authtoken)',
+            description:
+              'Hubungkan CLI Ngrok di komputer lokal Anda dengan akun Ngrok Anda menggunakan Authtoken unik dari dashboard.',
+            instructions: [
+              'Buka dashboard Ngrok dan navigasi ke menu "Getting Started" -> "Your Authtoken" (https://dashboard.ngrok.com/get-started/your-authtoken).',
+              'Salin (Copy) string Authtoken rahasia milik Anda.',
+              'Jalankan perintah konfigurasi di terminal untuk menyimpan token ke file konfigurasi ngrok lokal komputer Anda.',
+              'PENTING: Ganti TOKEN_KAMU dengan token asli dari dashboard. Jangan pernah membagikan atau meng-commit token ini ke Git repository!',
+            ],
+            codeSnippet: {
+              filename: 'terminal',
+              language: 'bash',
+              description: 'Menyimpan authtoken ke konfigurasi ngrok',
+              code: 'ngrok config add-authtoken TOKEN_KAMU',
+            },
+            verification: {
+              action: 'Jalankan perintah konfigurasi authtoken di terminal',
+              expectedResult: 'Muncul pesan konfirmasi: "Authtoken saved to configuration file: ..."',
+            },
+          },
+          {
+            stepNumber: 5,
+            title: 'Langkah 5: Pastikan Konfigurasi Port di be/.env',
+            description:
+              'Buka file .env pada proyek backend (be) dan pastikan variabel PORT dan FRONTEND_URL sudah terkonfigurasi dengan tepat.',
+            instructions: [
+              'Buka file be/.env di VS Code.',
+              'Pastikan variabel PORT bernilai 5000.',
+              'Pastikan variabel FRONTEND_URL tersedia (misalnya http://localhost:3000 untuk frontend lokal, atau URL frontend anggota tim jika sudah di-deploy).',
+              'Jika variabel tersebut sudah tersedia di .env Anda, cukup sesuaikan nilainya tanpa membuat baris ganda.',
+            ],
+            codeSnippet: {
+              filename: 'be/.env',
+              language: 'env',
+              description: 'Konfigurasi PORT dan FRONTEND_URL backend',
+              code: `PORT=5000
+FRONTEND_URL=http://localhost:3000`,
+            },
+            verification: {
+              action: 'Cek isi file be/.env',
+              expectedResult: 'Variabel PORT=5000 dan FRONTEND_URL terdefinisi dengan benar.',
+            },
+          },
+          {
+            stepNumber: 6,
+            title: 'Langkah 6: Gunakan Environment Variable di Express',
+            description:
+              'Pastikan server Express membaca port secara dinamis dari process.env.PORT daripada menuliskan port secara hardcoded di kode sumber.',
+            instructions: [
+              'Buka file entry point server backend Anda (be/src/server.ts atau be/src/index.ts).',
+              'Pastikan konfigurasi server membaca port dari .env dengan fallback: const PORT = process.env.PORT || 5000;',
+              'Gunakan variabel PORT pada pemanggilan app.listen(PORT, ...).',
+              'Catatan: Jika proyek sudah memiliki konfigurasi server sendiri, sesuaikan konfigurasi tersebut tanpa perlu membuat server baru.',
+            ],
+            codeSnippet: {
+              filename: 'be/src/server.ts',
+              language: 'typescript',
+              description: 'Membaca port secara fleksibel dari .env',
+              code: `const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(\`BE running on port \${PORT}\`);
+});`,
+            },
+            verification: {
+              action: 'Amati pesan log terminal backend saat dijalankan ("npm run dev")',
+              expectedResult: 'Muncul pesan log: "BE running on port 5000".',
+            },
+          },
+          {
+            stepNumber: 7,
+            title: 'Langkah 7: Konfigurasikan CORS',
+            description:
+              'Karena frontend rekan tim berada di origin/komputer yang berbeda, middleware CORS wajib dikonfigurasi agar browser rekan mengizinkan request API.',
+            instructions: [
+              'Pastikan package cors dan @types/cors sudah terpasang. Jika belum, jalankan: npm install cors && npm install -D @types/cors',
+              'Buka file konfigurasi aplikasi Express (be/src/app.ts atau be/src/index.ts).',
+              'Tambahkan middleware cors() dengan konfigurasi origin yang membaca process.env.FRONTEND_URL.',
+              'PENTING: Pastikan middleware CORS dipasang SEBELUM deklarasi route-route API!',
+            ],
+            codeSnippet: {
+              filename: 'be/src/app.ts',
+              language: 'typescript',
+              description: 'Konfigurasi middleware CORS sebelum route API',
+              code: `// Install dependencies jika belum:
+// npm install cors
+// npm install -D @types/cors
+
+import express from 'express';
+import cors from 'cors';
+
+const app = express();
+
+// Pasang middleware CORS sebelum route API
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
+// Deklarasi route API setelah middleware CORS:
+// app.use('/api', apiRouter);`,
+            },
+            verification: {
+              action: 'Periksa urutan pemanggilan middleware di be/src/app.ts',
+              expectedResult: 'Middleware cors(...) dipanggil sebelum rute API didaftarkan.',
+            },
+          },
+          {
+            stepNumber: 8,
+            title: 'Langkah 8: Jalankan Ngrok',
+            description:
+              'Buka sesi tunnel Ngrok yang memetakan port 5000 lokal ke alamat internet publik HTTPS.',
+            instructions: [
+              'Buka jendela Terminal baru di VS Code atau OS (jangan menutup terminal tempat backend Express sedang berjalan).',
+              'Jalankan perintah: ngrok http 5000',
+              'Terminal akan beralih menampilkan antarmuka status sesi Ngrok yang aktif.',
+              'PERINGATAN: Biarkan terminal ngrok ini tetap berjalan selama backend digunakan oleh rekan tim. Menutup terminal akan memutus akses publik.',
+            ],
+            codeSnippet: {
+              filename: 'terminal-ngrok',
+              language: 'bash',
+              description: 'Membuka tunnel ngrok pada port 5000',
+              code: 'ngrok http 5000',
+            },
+            verification: {
+              action: 'Perhatikan tampilan terminal ngrok',
+              expectedResult: 'Status menunjukkan "online" dan baris Forwarding menampilkan URL HTTPS publik.',
+            },
+          },
+          {
+            stepNumber: 9,
+            title: 'Langkah 9: Salin URL Publik Ngrok',
+            description:
+              'Dapatkan URL publik HTTPS unik yang disediakan oleh Ngrok untuk dibagikan ke rekan tim frontend.',
+            instructions: [
+              'Di antarmuka terminal Ngrok, cari baris "Forwarding".',
+              'Salin URL yang berawalan "https://", misalnya: https://xxxxx.ngrok-free.app',
+              'URL ini sekarang menjadi alamat publik backend-mu di internet.',
+              'Endpoint API backend lokal dapat diakses secara publik melalui URL tersebut, misalnya: https://xxxxx.ngrok-free.app/api/users atau /api/todos.',
+            ],
+            codeSnippet: {
+              filename: 'terminal-output-ngrok',
+              language: 'text',
+              description: 'Contoh tampilan forwarding URL publik Ngrok',
+              code: `Session Status                online
+Account                       Nama Kamu (Plan: Free)
+Version                       3.x.x
+Region                        Asia Pacific (ap)
+Latency                       ...
+Web Interface                 http://127.0.0.1:4040
+Forwarding                    https://xxxxx.ngrok-free.app -> http://localhost:5000`,
+            },
+            verification: {
+              action: 'Buka URL publik ngrok tersebut di browser',
+              expectedResult: 'Backend merespons atau menampilkan antarmuka peringatan awal Ngrok Free.',
+            },
+          },
+          {
+            stepNumber: 10,
+            title: 'Langkah 10: Hubungkan Frontend dengan Backend',
+            description:
+              'Konfigurasikan frontend Next.js milik rekan tim agar melakukan request ke URL publik Ngrok menggunakan environment variable.',
+            instructions: [
+              'Beri tahu rekan tim frontend URL publik Ngrok yang sedang aktif.',
+              'Pada proyek frontend rekan, buat atau sesuaikan file .env.local dengan NEXT_PUBLIC_API_URL.',
+              'Ganti nilai URL tersebut dengan URL ngrok yang sebenarnya (tanpa trailing slash di akhir).',
+              'Gunakan environment variable saat melakukan request fetch / axios di kode frontend.',
+              'Tips Ngrok Free: Tambahkan header "ngrok-skip-browser-warning": "true" pada request fetch agar tidak dicegat oleh halaman intersitial peringatan peramban dari Ngrok.',
+              'Ingatkan rekan untuk me-restart server Next.js ("npm run dev") setelah mengedit .env.local.',
+            ],
+            codeSnippet: {
+              filename: 'frontend/.env.local & request code',
+              language: 'typescript',
+              description: 'Konfigurasi environment variable dan contoh pemanggilan API di frontend rekan',
+              code: `// 1. Pada file frontend/.env.local rekan Anda:
+NEXT_PUBLIC_API_URL=https://xxxxx.ngrok-free.app
+
+// 2. Pada file komponen / aksi data fetcher rekan Anda:
+const response = await fetch(\`\${process.env.NEXT_PUBLIC_API_URL}/api/users\`, {
+  headers: {
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true', // Mencegah interstitial page Ngrok Free
+  },
+});
+const data = await response.json();`,
+            },
+            verification: {
+              action: 'Rekan frontend menjalankan request API ke backend Anda',
+              expectedResult: 'Frontend rekan berhasil menerima response JSON dari backend Anda tanpa error jaringan.',
+            },
+          },
+          {
+            stepNumber: 11,
+            title: 'Langkah 11: Uji Koneksi FE dan BE',
+            description:
+              'Lakukan checklist verifikasi menyeluruh untuk memastikan integrasi FE dan BE publik berjalan sempurna:',
+            instructions: [
+              'Express dipastikan berjalan di port 5000.',
+              'Ngrok berjalan dan menghasilkan URL publik aktif.',
+              'Endpoint API dapat diakses melalui URL ngrok (tes via browser atau Postman).',
+              'FE rekan tim menggunakan NEXT_PUBLIC_API_URL di file .env.local.',
+              'CORS di backend mengizinkan origin FE rekan tim.',
+              'Request dari FE rekan berhasil menerima response valid dari BE dan data tampil di UI antarmuka rekan.',
+            ],
+            verification: {
+              action: 'Minta rekan frontend mencoba alur login atau fetch data di browser laptopnya',
+              expectedResult: 'Log terminal backend & web interface Ngrok (http://127.0.0.1:4040) mencatat request masuk dengan status HTTP 200 OK.',
+            },
+          },
+          {
+            stepNumber: 12,
+            title: 'Langkah 12: Jalankan Selama Development & Aturan Keamanan',
+            description:
+              'Panduan menjaga kelancaran development kolaboratif serta mematuhi standar keamanan kredensial Git.',
+            instructions: [
+              'Tetap Jalankan Proses: Selama development, pastikan Express dan ngrok tetap berjalan di terminal masing-masing.',
+              'Penanganan URL Dinamis: Pada akun Ngrok Free, jika sesi terputus atau terminal ditutup, URL ngrok akan berganti acak saat dijalankan ulang. Jika URL berubah, perbarui NEXT_PUBLIC_API_URL di .env.local FE rekan, lalu restart server Next.js.',
+              'KEAMANAN GIT (SANGAT PENTING): Jangan pernah memasukkan Authtoken ngrok ke dalam repositori Git.',
+              'Pastikan file .env (pada BE) dan .env.local (pada FE) yang berisi konfigurasi lokal tidak di-commit dan sudah terdaftar di dalam .gitignore.',
+            ],
+            codeSnippet: {
+              filename: '.gitignore',
+              language: 'text',
+              description: 'Pastikan file env lokal dilindungi oleh .gitignore',
+              code: `# Environment variable files (JANGAN PERNAH DI-COMMIT)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Authtoken & credentials
+ngrok.yml`,
+            },
+            verification: {
+              action: 'Jalankan "git status" di terminal root proyek, frontend, dan backend',
+              expectedResult: 'File .env dan .env.local tidak tercatat di daftar tracking Git.',
+            },
+          },
+        ],
+      },
     ],
     // Backward compatibility
     steps: [
@@ -1326,9 +1651,11 @@ npm run dev`,
       { title: 'Checkpoint 7: Setup Controllers', description: 'authController.ts (bcrypt & JWT) & todoController.ts' },
       { title: 'Checkpoint 8: Setup Routes & Server', description: 'api.ts, app.ts (CORS, parser), server.ts (listen)' },
       { title: 'Checkpoint 9: Uji Integrasi Auth FE-BE', description: 'Menjalankan MySQL, BE, FE, dan testing login sukses & gagal di browser' },
+      { title: 'Checkpoint 10: Publikasi BE ke Publik (Ngrok)', description: 'Mengekspos backend lokal port 5000 ke internet publik via tunnel Ngrok HTTPS untuk kolaborasi tim FE-BE' },
     ],
     fileTree: [
       { path: 'frontend/', type: 'folder', status: 'added', description: 'Frontend Next.js (Port 3000)' },
+      { path: 'frontend/.env.local', type: 'file', status: 'added', description: 'Konfigurasi Endpoint API Publik (Ngrok)' },
       { path: 'be/src/index.ts', type: 'file', status: 'added', description: 'Backend Express TypeScript (Port 5000)' },
       { path: 'be/.env', type: 'file', status: 'added', description: 'Konfigurasi Environment Variable DB' },
       { path: 'be/src/db/config/database.ts', type: 'file', status: 'added', description: 'Koneksi Sequelize MySQL' },
@@ -1417,6 +1744,22 @@ npm run dev`,
         id: 'ac-17',
         text: 'Profil pengguna aktif tampil di antarmuka dashboard dan mekanisme logout berhasil membersihkan sesi login.',
       },
+      {
+        id: 'ac-18',
+        text: 'Backend Express berhasil di-tunneling menggunakan Ngrok dan menghasilkan URL publik HTTPS yang aktif.',
+      },
+      {
+        id: 'ac-19',
+        text: 'Konfigurasi CORS di backend mengizinkan permintaan dari origin frontend rekan tim.',
+      },
+      {
+        id: 'ac-20',
+        text: 'Frontend rekan tim berhasil terhubung dan mengonsumsi API melalui variabel lingkungan NEXT_PUBLIC_API_URL.',
+      },
+      {
+        id: 'ac-21',
+        text: 'Authtoken Ngrok serta file kredensial .env dan .env.local aman terlindungi dan tidak di-commit ke repositori Git.',
+      },
     ],
     gitStandard: {
       branchName: 'feat/auth-todo-backend',
@@ -1438,6 +1781,21 @@ npm run dev`,
         symptom: 'Error JsonWebTokenError (jwt malformed / invalid signature)',
         cause: 'Token JWT tidak terkirim di Header Authorization atau JWT_SECRET tidak sinkron.',
         solution: 'Pastikan header Authorization dikirim dengan format "Bearer <token>" dan JWT_SECRET di .env terisi.',
+      },
+      {
+        symptom: 'URL Ngrok berubah setelah sesi dihentikan / terminal di-restart',
+        cause: 'Akun Ngrok Free plan menghasilkan subdomain acak baru setiap kali proses ngrok dimulai ulang.',
+        solution: 'Beri tahu rekan tim FE untuk memperbarui NEXT_PUBLIC_API_URL di file .env.local dengan URL baru, lalu lakukan restart dev server Next.js ("npm run dev").',
+      },
+      {
+        symptom: 'CORS Blocked saat rekan tim FE memanggil API Ngrok',
+        cause: 'Backend Express belum mengizinkan origin dari perangkat/port frontend rekan tim.',
+        solution: 'Sesuaikan variabel FRONTEND_URL di be/.env atau atur origin pada middleware cors() di be/src/app.ts agar mengizinkan origin frontend rekan.',
+      },
+      {
+        symptom: 'Respons fetch menghasilkan HTML bukan JSON ("ngrok-free.app interstitial warning")',
+        cause: 'Ngrok paket gratis menampilkan layar proteksi interstitial peramban untuk mencegah phishing bila diakses langsung tanpa header khusus.',
+        solution: 'Jika membuka di browser langsung, klik tombol "Visit Site". Jika memanggil via fetch/axios dari frontend rekan, tambahkan header: { "ngrok-skip-browser-warning": "true" }.',
       },
     ],
     nextStep: {
