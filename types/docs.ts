@@ -48,6 +48,7 @@ export interface PracticalStep {
     action: string;
     expectedResult: string;
   };
+  interactiveWidget?: 'folder-explorer' | 'component-scope';
 }
 
 export interface PracticalTask {

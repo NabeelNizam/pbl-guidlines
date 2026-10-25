@@ -123,6 +123,22 @@ npm run dev`,
               expectedResult: 'Halaman Next.js berhasil tampil',
             },
           },
+          {
+            stepNumber: 4,
+            title: 'Pedoman Struktur Folder Next.js (Interactive Explorer)',
+            description:
+              'Eksplorasi pedoman arsitektur direktori Next.js App Router secara interaktif. Pelajari kegunaan masing-masing folder, contoh file, best practices, serta klasifikasi folder wajib versus yang jarang digunakan.',
+            instructions: [
+              'Pilih opsi direktori "src/ (Standar)" atau "Tanpa src/" sesuai prompt konfigurasi yang Anda pilih sebelumnya.',
+              'Gunakan tab filter untuk mempelajari 3 kelompok utama: Wajib / Utama (Core), Umum Digunakan, dan Jarang Digunakan (Opsional).',
+              'Klik setiap entri folder atau file pada panel navigasi kiri untuk membaca detail fungsi, alasan frekuensi penggunaan, contoh file, dan snippet kode pemanggilan.',
+            ],
+            interactiveWidget: 'folder-explorer',
+            verification: {
+              action: 'Eksplorasi panel Interactive Folder Explorer dan cermati kelompok folder yang jarang digunakan (utils/, schemas/, config/, constants/, store/, styles/)',
+              expectedResult: 'Memahami standar struktur direktori Next.js dan mengetahui alternatif konsolidasi ke lib/ atau app/globals.css agar proyek tidak over-engineered.',
+            },
+          },
         ],
       },
 

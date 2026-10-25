@@ -6,6 +6,7 @@ import { CodeBlock } from '@/components/docs/CodeBlock';
 import { VisualReferenceCard } from '@/components/docs/VisualReferenceCard';
 import { StepVerificationCard } from '@/components/docs/StepVerificationCard';
 import { useDirectoryMode } from '@/components/docs/DirectoryModeToggle';
+import { InteractiveFolderExplorer } from '@/components/docs/InteractiveFolderExplorer';
 
 interface PracticalTaskStepperProps {
   task: PracticalTask;
@@ -318,6 +319,11 @@ export function PracticalTaskStepper({ task, moduleId, hideHeader }: PracticalTa
                 {/* Visual Reference / Screenshot Specification */}
                 {st.visualReference && (
                   <VisualReferenceCard reference={st.visualReference} />
+                )}
+
+                {/* Interactive Folder Explorer Widget */}
+                {st.interactiveWidget === 'folder-explorer' && (
+                  <InteractiveFolderExplorer />
                 )}
 
                 {/* Step Verification */}

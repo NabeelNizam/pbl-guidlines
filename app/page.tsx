@@ -1,6 +1,8 @@
 import React from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { TaskHeroButton } from '@/components/tasks/TaskHeroButton';
+import { Folder } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -19,9 +21,16 @@ export default function HomePage() {
             Panduan praktis pengerjaan proyek web bertahap. Dimulai dari inisialisasi folder proyek, setup Frontend Next.js (App Router), dan backend Express TypeScript.
           </p>
 
-          {/* CTA Buttons (Task-Driven Progress) */}
+          {/* CTA Buttons (Task-Driven Progress & Folder Explorer) */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <TaskHeroButton />
+            <Link
+              href="/folders"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            >
+              <Folder className="w-4 h-4 text-zinc-400" />
+              <span>Interactive Folder Explorer</span>
+            </Link>
           </div>
 
           {/* Standard Pipeline Showcase */}
