@@ -28,6 +28,14 @@ export const TASKS: TaskItem[] = [
     shortTitle: '02. Form, Auth & Mutasi',
     phase: 'Fase 2',
   },
+  {
+    id: 'task-3',
+    order: 3,
+    slug: '03-file-upload-cloud-storage',
+    title: 'Manajemen File Upload & Cloud Storage (Express Multer & Next.js)',
+    shortTitle: '03. File Upload & Storage',
+    phase: 'Fase 3',
+  },
 ];
 
 const STORAGE_KEY = 'pbl_completed_tasks';

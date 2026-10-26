@@ -89,6 +89,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
                 )}
               </Link>
+
+              <Link
+                href="/docs/03-file-upload-cloud-storage"
+                onClick={onClose}
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
+                  currentSlug === '03-file-upload-cloud-storage'
+                    ? 'bg-zinc-800 text-white font-medium'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
+                }`}
+              >
+                <div className="truncate">
+                  <span className="text-[10px] text-zinc-500 block font-mono">MODUL 03</span>
+                  <span className="truncate">File Upload &amp; Cloud Storage</span>
+                </div>
+                {currentSlug === '03-file-upload-cloud-storage' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                )}
+              </Link>
             </div>
           </div>
 

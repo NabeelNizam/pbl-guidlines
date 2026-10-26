@@ -308,6 +308,32 @@ export function sendError(res: Response, message: string, status = 400, details?
 }`,
     },
   },
+  {
+    id: 'be-file-upload-storage',
+    category: 'backend',
+    categoryLabel: 'Backend (BE)',
+    number: 6,
+    title: 'Manajemen File Upload & Cloud Storage Terabstraksi',
+    shortDesc: 'File biner tidak disimpan sebagai BLOB di database SQL. Backend menggunakan Multer dengan validasi MIME & batas ukuran 5 MB, dual-mode storage service (Cloud & lokal uploads/), serta proteksi rollback anti-file yatim.',
+    howToVerify: 'Unggah file PDF dan gambar < 5 MB, pastikan metadata tersimpan di tabel documents dan file tersimpan di storage/uploads. Uji file > 5 MB atau tipe terlarang, server harus menolak dengan status 400 tanpa crash.',
+    relatedModuleSlug: '03-file-upload-cloud-storage',
+    relatedModuleTitle: '03. Manajemen File Upload & Cloud Storage',
+    isCore: true,
+    codeSnippetExample: {
+      filename: 'be/src/services/storage.service.ts',
+      code: `// Dual-mode storage: otomatis fallback ke folder lokal uploads/ jika offline
+export class StorageService {
+  async uploadFile(fileBuffer: Buffer, originalName: string, mimeType: string) {
+    const safeKey = \`\${Date.now()}-\${crypto.randomBytes(4).toString('hex')}-\${originalName}\`;
+    await fs.promises.writeFile(path.join(this.localUploadDir, safeKey), fileBuffer);
+    return { name: originalName, fileKey: safeKey, url: \`/uploads/\${safeKey}\` };
+  }
+  async deleteFile(fileKey: string) {
+    await fs.promises.unlink(path.join(this.localUploadDir, path.basename(fileKey)));
+  }
+}`,
+    },
+  },
 
   // ==========================================
   // DATABASE (DB)

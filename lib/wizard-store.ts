@@ -108,6 +108,39 @@ export const WIZARD_SECTIONS_BY_MODULE: Record<string, WizardSection[]> = {
       ],
     },
   ],
+  '03-file-upload-cloud-storage': [
+    {
+      title: 'Konsep & Storage Service (BE)',
+      steps: [
+        { id: 1, taskId: 'task-1', title: 'Langkah 1: Pahami Perbedaan Database & Cloud Storage', shortLabel: '1. Konsep DB vs Storage' },
+        { id: 2, taskId: 'task-2', title: 'Langkah 2: Siapkan Storage Service (Cloud & Local Fallback)', shortLabel: '2. Storage Service' },
+      ],
+    },
+    {
+      title: 'Middleware & Controller (BE)',
+      steps: [
+        { id: 3, taskId: 'task-3', title: 'Langkah 3: Buat Middleware Validasi & Batasan Ukuran Multer', shortLabel: '3. Middleware Multer' },
+        { id: 4, taskId: 'task-4', title: 'Langkah 4: Simpan File & Referensi Database (Rollback Proteksi)', shortLabel: '4. Rollback Safety' },
+        { id: 5, taskId: 'task-5', title: 'Langkah 5: Sediakan Endpoint Tampilkan & Hapus File (Cegah IDOR)', shortLabel: '5. Cegah IDOR' },
+      ],
+    },
+    {
+      title: 'Antarmuka Upload & Pratinjau (FE)',
+      steps: [
+        { id: 6, taskId: 'task-6', title: 'Langkah 6: Komponen Upload Berkas Drag & Drop (FE)', shortLabel: '6. Drag & Drop Upload' },
+        { id: 7, taskId: 'task-7', title: 'Langkah 7: Kirim File & Indikator Progres Real-Time (XHR)', shortLabel: '7. Progress XHR' },
+        { id: 8, taskId: 'task-8', title: 'Langkah 8: Tampilkan File & Modal Pratinjau (FE)', shortLabel: '8. Card & Preview' },
+        { id: 9, taskId: 'task-9', title: 'Langkah 9: Implementasikan Fitur Hapus Berkas (FE & BE)', shortLabel: '9. Hapus Berkas' },
+      ],
+    },
+    {
+      title: 'Pengujian & Standar',
+      steps: [
+        { id: 10, taskId: 'task-10', title: 'Langkah 10: Uji Kasus Fungsional & Keamanan (6 Checkpoint)', shortLabel: '10. Uji 6 Checkpoint' },
+        { id: 11, taskId: 'git-kriteria', title: 'Git & Kriteria Selesai', shortLabel: '11. Git & Kriteria Selesai' },
+      ],
+    },
+  ],
 };
 
 export const WIZARD_SECTIONS: WizardSection[] = WIZARD_SECTIONS_BY_MODULE['01-setup-project'];

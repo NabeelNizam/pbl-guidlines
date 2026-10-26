@@ -1,4 +1,5 @@
 import { MODULE_02 } from './module-02-data';
+import { MODULE_03 } from './module-03-data';
 import { PhaseGroup, DocModule } from '@/types/docs';
 
 export const DOC_MODULES: DocModule[] = [
@@ -1825,6 +1826,11 @@ ngrok.yml`,
   // MODUL 02: Form Handling, Autentikasi DAL, & Mutasi Data
   // =============================================================
   MODULE_02,
+
+  // =============================================================
+  // MODUL 03: Manajemen File Upload & Cloud Storage
+  // =============================================================
+  MODULE_03,
 ];
 
 export const PHASE_GROUPS: PhaseGroup[] = [
@@ -1841,5 +1847,12 @@ export const PHASE_GROUPS: PhaseGroup[] = [
     title: 'Fase 2: Form Handling, Auth DAL & Mutasi Data',
     description: 'Penerapan autentikasi DAL, validasi Zod terpadu, Server Actions, proteksi IDOR, dan Optimistic UI di Next.js.',
     modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-2'),
+  },
+  {
+    id: 'fase-3',
+    number: 3,
+    title: 'Fase 3: File Upload & Cloud Storage',
+    description: 'Integrasi upload file (Multer), dual-mode storage service (Cloud & lokal), sanitasi berkas, dan proteksi IDOR.',
+    modules: DOC_MODULES.filter((m) => m.phaseId === 'fase-3'),
   },
 ];

@@ -1595,9 +1595,9 @@ export function OptimisticItemList({ initialItems }: { initialItems: Item[] }) {
     },
   ],
   nextStep: {
-    title: 'Deployment & Production Hardening',
-    slug: '03-production-deployment',
+    title: 'Manajemen File Upload & Cloud Storage',
+    slug: '03-file-upload-cloud-storage',
     description:
-      'Materi berikutnya: konfigurasi environment production, SSL/HTTPS, rate limiting, dan monitoring.',
+      'Materi berikutnya: upload file (Express Multer), dual-mode storage service, anti-IDOR, dan antarmuka Next.js.',
   },
 };
